@@ -4,8 +4,14 @@ import {useContext, Suspense, lazy, useEffect} from 'react';
 import { PATHS } from './paths';
 import Layout from '../common/Layout';
 
+// 지도 화면
 const Map = lazy(() => import('../pages/Map/Map.jsx'));
-const Chat = lazy(() => import('../pages/Chat/Chat.jsx'));
+
+// 채팅 화면
+const ChatListPage = lazy(() => import('../pages/Chat/ChatListPage.jsx'));
+const ChatRoomPage = lazy(() => import('../pages/Chat/ChatRoomPage.jsx'));
+
+// 프로필 화면
 const Profile = lazy(() => import('../pages/User/Profile/Profile.jsx'));
 
 function AppRouter() {
@@ -28,8 +34,8 @@ function AppRouter() {
         <Route path={PATHS.COMMUNITY.EDIT} element=""/>
 
         {/* 채팅 페이지 */}
-        <Route path={PATHS.CHAT.LIST} element={<Chat/>}/>
-        <Route path={PATHS.CHAT.ROOM} element=""/>
+        <Route path={PATHS.CHAT.LIST} element={<ChatListPage/>}/>
+        <Route path={`${PATHS.CHAT.ROOM}/:chatRoomNo?`} element={<ChatRoomPage/>}/>
 
         {/* 내정보 페이지 */}
         <Route path={PATHS.USER.PROFILE} element={<Profile/>}/>

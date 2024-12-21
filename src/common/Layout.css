@@ -1,3 +1,4 @@
+/* 레이아웃 */
 .layout { 
   display: flex; 
   flex-direction: column; 
@@ -8,6 +9,14 @@
   margin: 0 auto; 
 }
 
+/* 콘텐츠 영역 */
+.layout .content { 
+  flex-grow: 1; 
+  width: 100%; 
+  overflow-y: auto;
+}
+
+/* footer */
 .layout .footer { 
   width: 100%; 
   background-color: #fcfcfc; 
