@@ -9,7 +9,7 @@ function ProfileModal() {
       {/* user-profile-modal :: 프로필 모달 */}
       <div className="user-profile-modal">
         <div className="user-profile-modal-left">
-          <div className="user-profile-img"> 사진 </div>
+          <div className="user-profile-img" > <img src="public/img_dog.png"/> </div>
           <div className="user-profile-active"> 활성화 </div>
           <div className="user-profile-follow"> <button> 버튼 </button>
         </div>

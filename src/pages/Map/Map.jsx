@@ -14,7 +14,7 @@ function Map() {
       <MapAPI/>
 
       {/* 프로필 모달 컴포넌트 */}
-      {/* <ProfileModal /> */}      
+      {/* <ProfileModal />       */}
       
     
     </>
