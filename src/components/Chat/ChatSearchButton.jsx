@@ -1,8 +1,10 @@
 import "./ChatSearchButton.css";
 
-function ChatSearchButton() {
+function ChatSearchButton({className, image, handleOnClick}) {
   return (
-    <button>검색</button>
+    <button className={`chat-search-btn ${className}`} onClick={handleOnClick}>
+      <img src={image}/>
+    </button>
   );
 }
 

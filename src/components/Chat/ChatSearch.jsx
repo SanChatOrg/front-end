@@ -5,8 +5,8 @@ import ChatSearchInput from './ChatSearchInput';
 function ChatSearch() {
   return (
     <div className='chat-search-container'>
-      <ChatSearchInput/>
-      <ChatSearchButton/>
+      <ChatSearchInput type="text" placeholder="검색"/>
+      <ChatSearchButton image='/icons/ic_chat_search.svg'/>
     </div>
   );
 }

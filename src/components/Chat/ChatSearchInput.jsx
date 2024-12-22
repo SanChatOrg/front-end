@@ -1,9 +1,9 @@
 import "./ChatSearchInput.css";
 
-function ChatSearchInput() {
+function ChatSearchInput({className, type, placeholder}) {
   return (
     <>
-      <input type="text" />
+      <input className={`chat-search-input ${className}` } type={type} placeholder={placeholder}/>
     </>
   );
 }

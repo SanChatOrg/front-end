@@ -16,7 +16,7 @@ function ChatItem({image, name, message, date, chatRoomNo}) {
 
   return(
     <div className="chatroom-item" onClick={() => handleViewChatRoom(chatRoomNo)}>
-      <ChatProfileImg image={image}/>
+      <ChatProfileImg className="chat-list-profile" image={image}/>
 
       <div className="chatroom-content">
         <div className="chatroom-name">
