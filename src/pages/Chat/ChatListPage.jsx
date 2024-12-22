@@ -1,11 +1,16 @@
 import "./ChatListPage.css"
 import ChatList from "../../components/Chat/ChatList";
+import ChatSearch from "../../components/Chat/ChatSearch";
 
 function ChatListPage() {
   return (
-    <div className="chat-container">
-      <ChatList/>
-    </div>
+    <>
+      <ChatSearch/>
+
+      <div className="chat-container">
+        <ChatList/>
+      </div>
+    </>
   );
 }
 
