@@ -1,0 +1,19 @@
+/* 한 게시글 전체 */
+
+/* CommunityPostItem.css */
+
+/* 전체 게시글 레이아웃 */
+.community-post-item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px; /* 각 게시글 간격 */
+}
+
+/* 프로필 + 옵션 버튼 레이아웃 */
+.post-header {
+  display: flex;
+  justify-content: space-between; /* 양쪽 끝으로 정렬 */
+  align-items: center; /* 수직 가운데 정렬 */
+  padding: 0 10px; /* 좌우 여백 */
+  margin-bottom: 10px; /* 아래 요소와 간격 */
+}

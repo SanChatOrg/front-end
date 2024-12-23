@@ -1,0 +1,36 @@
+/* 게시물 이미지 여러개일때 스크롤 컴포넌트 */
+.pagination-indicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px auto;
+  padding: 5px 10px;
+  border: 1px solid #d3b090;
+  border-radius: 20px;
+  background-color: #fdf6e3;
+  max-width: 15%;
+  height: 5px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  margin: 0 2px;
+  background-color: #888;
+  border-radius: 100%;
+}
+
+.dot.active {
+  background-color: #a0522d;
+}
+
+
+.dot:nth-child(4) {
+  width: 4px;
+  height: 4px;
+}
+
+.dot:nth-child(5) {
+  width: 2px;
+  height: 2px;
+}

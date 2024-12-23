@@ -19,7 +19,7 @@ const Footer = () => {
         <span>지도</span>
       </div>
       <div className="footer-item">
-        <div className="icon community-icon" onClick={() => handleNavigation(PATHS.COMMUNITY.LIST)}/>
+        <div className="icon community-icon" onClick={() => handleNavigation(PATHS.COMMUNITY.MAIN)}/>
         <span>커뮤니티</span>
       </div>
       <div className="footer-item active">

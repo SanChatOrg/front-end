@@ -1,0 +1,138 @@
+/* src/pages/Community/CommunityWriteEdit.css */
+
+div {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 상단바 */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  line-height: 50px;
+  border-bottom: 1px solid #b6b6b6;
+}
+
+/* 페이지명 */
+.page-name {
+  text-align: center;
+  height: 50px;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+
+}
+
+/* 사진첨부 + 내용입력 */
+.mid {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 사진 첨부 */
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 400px;
+  border-bottom: 1px solid #b6b6b6;
+}
+
+/* 업로드버튼 */
+.img-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
+  border: none;
+  background-color: #E2E2E2;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 사진첨부 인풋 */
+.file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  border-radius: 100%;
+}
+
+/* 사진 등록 텍스트 */
+.image-text {
+  color: #999;
+  cursor: default;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* 내용 입력 */
+.content-container {
+  width: 100%;
+  margin-top: 20px;
+  padding: 0 16px;
+}
+
+/* 내용 입력 */
+.content-container textarea {
+  border: none;
+  height: 330px;
+  width: 100%;
+  line-height: 1.5;
+  box-sizing: border-box;
+  resize: none;
+  overflow-y: auto;
+
+}
+
+/* 내용 입력 placeholder */
+.content-container textarea::placeholder {
+  color: #999;
+  text-align: left;
+  vertical-align: top;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* 하단 공유 */
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3px;
+}
+
+/* 공유 버튼 */
+.share-btn {
+  width: 100%;
+  max-width: 450px;
+  background-color: #B95C31;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  text-align: center;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.share-btn:hover {
+  background-color: #A24D28;
+}

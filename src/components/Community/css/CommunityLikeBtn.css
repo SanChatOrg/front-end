@@ -1,0 +1,12 @@
+/* 좋아요 버튼과 좋아요 수 컴포넌트 */
+
+.like-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.like-count {
+  font-size: 12px;
+  font-weight: bold;
+}

@@ -1,0 +1,28 @@
+/* 뒤로가기 | 페이지명 상단 바 */
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  line-height: 50px;
+  border-bottom: 1px solid #b6b6b6;
+  padding: 0 16px;
+  position: relative;
+}
+
+.page_name {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.write-btn {
+  position: absolute;
+  right: 16px;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+}

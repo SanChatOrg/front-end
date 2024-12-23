@@ -1,0 +1,18 @@
+/* 댓글버튼과 댓글 수 컴포넌트 */
+
+.reply-container {
+  display: flex; /* 버튼과 숫자를 가로로 배치 */
+  align-items: center; /* 수직 가운데 정렬 */
+  gap: 8px; /* 버튼과 숫자 사이 간격 */
+}
+
+
+
+.reply-container button:hover {
+  opacity: 0.7; /* 호버 시 투명도 효과 */
+}
+
+.reply-count {
+  font-size: 12px; /* 숫자 폰트 크기 */
+  font-weight: bold; /* 숫자 굵기 */
+}

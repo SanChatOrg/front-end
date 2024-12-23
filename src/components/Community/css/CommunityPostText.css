@@ -1,0 +1,19 @@
+/* 게시글 본문내용 */
+
+.post-content {
+  margin-top: 5px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.userName {
+  font-weight: bold;
+  margin-right: 8px;
+  display: inline;
+}
+
+.post-text {
+  display: inline;
+  font-size: 13px;
+  color: #555;
+}

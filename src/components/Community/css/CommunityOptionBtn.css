@@ -1,0 +1,50 @@
+/* 수정 삭제 등 포함하는 옵션 버튼 컴포넌트 */
+
+.option-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.dot-button {
+  background: none;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  outline: none;
+}
+
+.drop-menu {
+  position: absolute;
+  top: 20px;
+  right: 0;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  width: 100px;
+  z-index: 10;
+  border: 1px solid #e3e3e3;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  color: #333;
+  transition: background-color 0.2s;
+}
+
+.menu-item:hover {
+  background-color: #f1f1f1;
+}
+
+
+.menu-item.delete {
+  color: red;
+}
+
+.menu-item.delete:hover {
+  background-color: #ffe6e6;
+}

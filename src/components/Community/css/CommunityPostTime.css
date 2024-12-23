@@ -1,0 +1,9 @@
+/* 게시물 작성 시간 */
+
+.time-display {
+  font-size: 11px;
+  color: #999;
+  font-weight: normal;
+  text-align: left;
+  margin-top: 5px;
+}

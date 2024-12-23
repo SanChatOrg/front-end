@@ -1,0 +1,18 @@
+/* 글 보기 페이지 댓글 | 댓글 수 */
+
+
+.reply {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.replyCnt {
+  font-size: 14px;
+  font-weight: bold;
+  color: #b95c31;
+  margin-left: 4px;
+}

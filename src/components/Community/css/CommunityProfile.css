@@ -1,0 +1,28 @@
+/* 프로필 사진과 닉네임 컴포넌트 */
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 7px;
+  margin-left: 5px;
+}
+
+.profile-container {
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.userName {
+  font-size: 13px;
+  font-weight: bold;
+}

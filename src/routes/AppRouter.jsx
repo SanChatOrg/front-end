@@ -14,6 +14,13 @@ const ChatRoomPage = lazy(() => import('../pages/Chat/ChatRoomPage.jsx'));
 // 프로필 화면
 const Profile = lazy(() => import('../pages/User/Profile/ProfileMain.jsx'));
 
+// 커뮤니티 화면
+const CommunityMain = lazy(() => import('../pages/Community/CommunityMain.jsx'));
+const CommunityWrite = lazy(() => import('../pages/Community/CommunityWrite.jsx'));
+const CommunityEdit = lazy(() => import('../pages/Community/CommunityEdit.jsx'));
+const CommunityDetail = lazy(() => import('../pages/Community/CommunityDetail.jsx'));
+
+
 function AppRouter() {
   
   return (
@@ -28,10 +35,10 @@ function AppRouter() {
         <Route path={PATHS.MAP} element={<Map/>}/>
 
         {/* 커뮤니티 페이지 */}
-        <Route path={PATHS.COMMUNITY.LIST} element=""/>
-        <Route path={PATHS.COMMUNITY.CONTENT} element=""/>
-        <Route path={PATHS.COMMUNITY.WRITE} element=""/>
-        <Route path={PATHS.COMMUNITY.EDIT} element=""/>
+        <Route path={PATHS.COMMUNITY.MAIN} element={<CommunityMain/>}/>
+        <Route path={PATHS.COMMUNITY.DETAIL} element={<CommunityDetail/>}/>
+        <Route path={PATHS.COMMUNITY.WRITE} element={<CommunityWrite/>}/>
+        <Route path={PATHS.COMMUNITY.EDIT} element={<CommunityEdit/>}/>
 
         {/* 채팅 페이지 */}
         <Route path={PATHS.CHAT.LIST} element={<ChatListPage/>}/>

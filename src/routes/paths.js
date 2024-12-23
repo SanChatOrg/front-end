@@ -8,8 +8,8 @@ export const PATHS = {
 
   // 커뮤니티 페이지
   COMMUNITY: {
-    LIST: "/community/list",         // 커뮤니티 목록 경로
-    CONTENT: "/community/content",   // 커뮤니티 상세 경로
+    MAIN: "/community/main",         // 커뮤니티 목록 경로
+    DETAIL: "/community/detail",   // 커뮤니티 상세 경로
     WRITE: "/community/write",       // 커뮤니티 작성 경로
     EDIT: "/community/edit",         // 커뮤니티 수정 경로
   },

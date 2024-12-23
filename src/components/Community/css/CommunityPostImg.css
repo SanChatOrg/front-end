@@ -1,0 +1,15 @@
+/* 게시물 사진 컴포넌트 */
+.post-image-container {
+  width: 100%;
+  max-width: 467px;
+  margin: 0 auto;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.post-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
