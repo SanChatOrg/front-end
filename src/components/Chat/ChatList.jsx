@@ -1,8 +1,7 @@
 import ChatItem from "./ChatItem"
 import "./ChatList.css"
-import { PATHS } from "../../routes/paths";
 
-function ChatList() {
+function ChatList({className}) {
 
   const chatroomList = [
     {image: "/src/assets/img/user/ex_user_profile_01.png", name: "시바견 노예", message: "산책 ㄱㄱ?", date: "오늘", chatRoomNo: 1},
@@ -13,11 +12,18 @@ function ChatList() {
 
   return(
 
-    <div className="chatroom-list">
+    <div className={`chat-list ${className}`}>
       {chatroomList ? (
-       chatroomList.map((user, index) => (
-        <ChatItem key={index} image={user.image} name={user.name} message={user.message} date={user.date} chatRoomNo={user.chatRoomNo}/>
-       )) 
+      chatroomList.map((user, index) => (
+        <ChatItem 
+          key={index} 
+          image={user.image} 
+          name={user.name} 
+          message={user.message} 
+          date={user.date} 
+          chatRoomNo={user.chatRoomNo}
+        />
+      )) 
       ) : (
         <p>채팅방이 없습니다.</p>
       ) 

@@ -1,10 +1,9 @@
 .chat-search-input {
   width: 80%;
-  border-radius: 5px;
+  border-radius: var(--chat-radius-default);
   border: none;
-  appearance: none;
   outline: none;
-  background-color: var(--chat-input-default-color);
+  background-color: var(--chat-input-color-default);
   padding: 4px 20px;
   line-height: 30px;
   font-size: 16px;

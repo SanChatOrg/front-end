@@ -1,0 +1,17 @@
+.chat-room-footer-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--chat-padding-default);
+}
+
+.chat-room-footer-camera-btn,
+.chat-room-footer-send-btn {
+  width: 54px;
+  height: auto;
+}
+
+.chat-room-footer-input {
+  width: 65%;
+  height: auto;
+}
