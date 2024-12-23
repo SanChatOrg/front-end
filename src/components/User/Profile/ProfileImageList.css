@@ -1,0 +1,15 @@
+
+
+/* part 3 */
+
+
+.profile-part3 {
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 10px;
+  }
+  
+  .profile-grid-img {
+    width: 100%;
+  }

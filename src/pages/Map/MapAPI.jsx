@@ -1,16 +1,38 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { PATHS } from '../../routes/paths';
+import { useNavigate } from 'react-router-dom';
+import ReactDOMServer from 'react-dom/server';
+
 import './MapAPI.css';
-import MapWalkDisplay from './MapWalkDisplay';
+import ProfileModal from '../../components/User/Profile/ProfileModal';
+
+
 
 
 function MapAPI() {
     
+  const navigate = useNavigate();
+
+  const goUserProflie = () => {
+    navigate(`${PATHS.USER.PROFILE}`);
+  };
+
     const mapContainer = useRef(null); // 네이버 지도
     const mapRef = useRef(null); // 지도 객체 참조
     const [location, setLocation] = useState({latitude : null , longitude : null}); // 내 위치
 
+    // 유저 정보 임시 값
+    const UserProfileData = {   image : 'src/assets/img/user/ex_user_profile_03.png',
+      name : '브라운박사',
+      info : ' 7 강아지 키우고 있는 브라운 박사 ! 입니다.',
+      dogList : ["레오", "헥토파스칼", "감자"],
+      walkStatus : false,
+    };
 
-    // 내 위치 가져오기
+
+
+
+    // 내 위치 가져오기 
     useEffect(() => {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -18,6 +40,7 @@ function MapAPI() {
         },
       );
       console.log(location); 
+
     }, []); 
 
     // 지도 불러오기
@@ -30,13 +53,7 @@ function MapAPI() {
         // const HOME_PATH = window.HOME_PATH || ".";
         const position = new naver.maps.LatLng(location.latitude, location.longitude);
   
-        // // 네이버 지도 객체 생성
-        // mapRef.current = new naver.maps.Map(mapContainer.current, {
-        //   center: position,
-        //   zoom: 19,
-        // });
-
-
+        // 지도 객체 생성하기기
         const mapOptions = {
           center: new naver.maps.LatLng(location.latitude, location.longitude), // 내 위치
           zoom: 10,
@@ -92,7 +109,6 @@ function MapAPI() {
           },
         };
         
-
         // 마커 추가 (1)
         const marker =  new naver.maps.Marker(markerOptions);
 
@@ -102,45 +118,19 @@ function MapAPI() {
         // 마커 추가 (3)
         const marker3 =  new naver.maps.Marker(markerOptions3);
       
+        // 정보창 컴포넌트 HTML 문자열로 변환
+        const contentString = ReactDOMServer.renderToString(      
+        <ProfileModal      
+          image={UserProfileData.image} 
+          name={UserProfileData.name} 
+          info={UserProfileData.info} 
+          dogList={UserProfileData.dogList}  
+          walkStatus={UserProfileData.walkStatus}
+          goToProfile={goUserProflie}
+        />      
+      );
 
-        // new naver.maps.Marker({
-        //   position: new naver.maps.LatLng(location.latitude, location.longitude),
-        //   map: mapRef.current,
-        // });
-
-
-        // 정보창 추가 (1)
-        const contentString = [
-          '<div style="display: flex; gap: 5px; width: 350px; padding: 10px; border: 1px solid black; border-radius: 5px;">',
-          '  <div style="position: relative;">',
-          '    <div style="margin: 10px; border: 1px solid black; border-radius: 100%; width: 100px; height: 100px;">',
-          '      <img src="public/img_dog.png" style="width: 100%; height: 100%; object-fit: cover;" />',
-          '    </div>',
-          '    <div style="position: absolute; top: 65px; left: 65px; border: 1px solid black; border-radius: 100%; background-color: #ddd; width: 50px; height: 50px;">',
-          '      활성화',
-          '    </div>',
-          '    <div>',
-          '      <button style="width: 120px; border: 1px solid blue; border-radius: 5px;">버튼</button>',
-          '    </div>',
-          '  </div>',
-          '  <div style="width: 100%; display: flex; flex-direction: column;">',
-          '    <div style="height: 80%;">',
-          '      <div style="font-size: 20px; font-weight: bold; padding: 5px;">웰시코기 123</div>',
-          '      <div style="padding: 5px;">소개 글이 없습니다.</div>',
-          '    </div>',
-          '    <div style="height: 20%;">',
-          '      <div style="float: right; display: flex; gap: 5px;">',
-          '        <div style="border: 1px solid blue; border-radius: 5px; padding: 3px 5px;">이름</div>',
-          '        <div style="border: 1px solid blue; border-radius: 5px; padding: 3px 5px;">이름</div>',
-          '        <div style="border: 1px solid blue; border-radius: 5px; padding: 3px 5px;">이름</div>',
-          '        <div style="border: 1px solid blue; border-radius: 5px; padding: 3px 5px;">...</div>',
-          '      </div>',
-          '    </div>',
-          '  </div>',
-          '</div>',
-        ].join('');
-        
-
+        // 정보창 생성
         const infowindow = new naver.maps.InfoWindow({
           content: contentString,
           anchorSize: new naver.maps.Size(15, 5),
@@ -160,11 +150,9 @@ function MapAPI() {
         // infowindow.open(mapRef.current, marker);
       }
 
-
-
-
     }, [location]);
     
+
     // 내 위치로 가기
     const goMyLocation = (e) => {
       e.preventDefault();
@@ -185,7 +173,7 @@ function MapAPI() {
       <div className='map-box'>
 
         {/* 산책 정보 표시 */}
-        <MapWalkDisplay/>
+        {/* <MapWalkDisplay/> */}
 
         {/* 내 위치 바로가기 */}
         <div className='map-my-location'> 
@@ -194,7 +182,7 @@ function MapAPI() {
 
         {/* 보이기 버튼 */}
         <div className='map-view-mode'> 
-            <button > 👁️ </button>
+            <button onClick={goUserProflie}> 👁️ </button>
         </div>
 
         {/* 공개 옵션 */}

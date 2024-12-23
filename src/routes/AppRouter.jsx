@@ -12,7 +12,7 @@ const ChatListPage = lazy(() => import('../pages/Chat/ChatListPage.jsx'));
 const ChatRoomPage = lazy(() => import('../pages/Chat/ChatRoomPage.jsx'));
 
 // 프로필 화면
-const Profile = lazy(() => import('../pages/User/Profile/Profile.jsx'));
+const Profile = lazy(() => import('../pages/User/Profile/ProfileMain.jsx'));
 
 function AppRouter() {
   

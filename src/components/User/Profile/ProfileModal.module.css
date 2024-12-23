@@ -1,0 +1,112 @@
+/* ProfileModal.module.css */
+
+/* 프로필 모달 전체 스타일 */
+.ProfileModal {
+    display: flex;
+    gap: 5px;
+    width: 350px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  }
+  
+  /* 왼쪽 섹션 스타일 */
+  .ProfileModalLeft {
+    position: relative;
+  }
+  
+  /* 프로필 이미지 스타일 */
+  .ProfileModalImg {
+    margin: 10px;
+    border: 3px solid var(--main-color);
+    border-radius: 100%;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .ProfileModalImg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 100%;
+  }
+  
+  /* 산책 여부 아이콘 */
+  .ProfileModalActive {
+    position: absolute;
+    top: 70px;
+    left: 70px;
+    border-radius: 100%;
+    background-color: #ddd;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .ProfileModalActive img {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* 프로필 보기 버튼 */
+  .ProfileModalFollow button {
+    font-size: 15px;
+    width: 120px;
+    padding: 3px 5px;
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
+    background-color: var(--sub-color);
+    border-radius: 5px;
+    font-weight: bold;
+  }
+  
+  .ProfileModalFollow button:hover {
+    cursor: pointer;
+  }
+  
+  /* 오른쪽 섹션 스타일 */
+  .ProfileModalRight {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* 상단 섹션 스타일 */
+  .ProfileModalRightTop {
+    height: 80%;
+  }
+  
+  /* 하단 섹션 스타일 */
+  .ProfileModalRightBottom {
+    height: 20%;
+  }
+  
+  /* 이름 스타일 */
+  .ProfileModalName {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px;
+    color: var(--main-color);
+  }
+  
+  /* 소개 스타일 */
+  .ProfileModalIntro {
+    padding: 5px;
+  }
+  
+  /* 강아지 목록 스타일 */
+  .ProfileModalDogList {
+    float: right;
+    display: flex;
+    gap: 5px;
+  }
+  
+  .ProfileModalDogList div {
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
+    background-color: var(--sub-color);
+    border-radius: 5px;
+    padding: 3px 5px;
+    font-size: 15px;
+  }
+  
