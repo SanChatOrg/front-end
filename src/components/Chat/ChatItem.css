@@ -1,0 +1,39 @@
+.chatroom-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+
+}
+
+.chat-list-profile {
+  width: 15%;
+}
+
+.chatroom-content {
+  width: 70%;
+  align-items: center;
+  padding: 8px 10px;
+  overflow: hidden;
+}
+
+.chatroom-name {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.chatroom-message {
+  color: #666;
+  font-size: 14px;
+  white-space: nowrap;       
+  overflow: hidden;          
+  text-overflow: ellipsis;   
+  margin-top: 2px;
+}
+
+.chatroom-date {
+  width: 12%;
+  text-align: right;
+  color: #999;
+  font-size: 12px;
+  padding-top: 8px;
+}

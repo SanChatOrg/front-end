@@ -1,0 +1,6 @@
+.chat-search-container {
+  padding: 10px 20px;
+  background-color: var(--white);
+  display: flex;
+  justify-content: space-between;
+}

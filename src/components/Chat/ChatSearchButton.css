@@ -1,0 +1,15 @@
+.chat-search-btn {
+  border: none;
+  appearance: none;
+  height: 38px;
+  width: 38px;
+  background-color: transparent;
+}
+
+.chat-search-btn:hover {
+  cursor: pointer;
+}
+
+.chat-search-btn > img {
+  width: 100%;
+}
