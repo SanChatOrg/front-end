@@ -5,21 +5,39 @@ import ReactDOMServer from 'react-dom/server';
 
 import './MapAPI.css';
 import ProfileModal from '../../components/User/Profile/ProfileModal';
-
+import useWatchLocation from './useWatchLocation';
 
 
 
 function MapAPI() {
-    
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
+  
   const navigate = useNavigate();
 
-  const goUserProflie = () => {
+  // 프로필 가기 (네비게이트)
+  const goUserProflie = () => { 
     navigate(`${PATHS.USER.PROFILE}`);
+
   };
 
     const mapContainer = useRef(null); // 네이버 지도
     const mapRef = useRef(null); // 지도 객체 참조
-    const [location, setLocation] = useState({latitude : null , longitude : null}); // 내 위치
+
+    // const [location, setLocation] = useState({latitude : null , longitude : null}); // 내 위치
+  
+    
+    // 내 위치 가져오기 
+    useEffect(() => {
+
+      navigator.geolocation.watchPosition(
+        (position) => {
+          setLocation({latitude:position.coords.latitude , longitude : position.coords.longitude}); // 위도 경도 값
+        },
+      );
+      console.log(location); 
+
+    }, []); 
+
 
     // 유저 정보 임시 값
     const UserProfileData = {   image : 'src/assets/img/user/ex_user_profile_03.png',
@@ -30,19 +48,6 @@ function MapAPI() {
     };
 
 
-
-
-    // 내 위치 가져오기 
-    useEffect(() => {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({latitude:position.coords.latitude , longitude : position.coords.longitude}); // 위도 경도 값
-        },
-      );
-      console.log(location); 
-
-    }, []); 
-
     // 지도 불러오기
     useEffect(() => {
       // 네이버 지도 API가 로드된 후 실행
@@ -52,7 +57,16 @@ function MapAPI() {
 
         // const HOME_PATH = window.HOME_PATH || ".";
         const position = new naver.maps.LatLng(location.latitude, location.longitude);
-  
+        const position2 = new naver.maps.LatLng(
+          37.5762414
+          ,
+          127.199533);
+        const position3 = new naver.maps.LatLng( 
+          37.5799
+          ,
+          127.200564
+          );
+
         // 지도 객체 생성하기기
         const mapOptions = {
           center: new naver.maps.LatLng(location.latitude, location.longitude), // 내 위치
@@ -75,7 +89,7 @@ function MapAPI() {
 
         // 마커 옵션 1
         const markerOptions = {
-          position: position.destinationPoint(90, 0), // 90도 방향으로 15m 떨어진 위치
+          position: position.destinationPoint(0, 0), // 90도 방향으로 15m 떨어진 위치
           map: mapRef.current,
           icon: {
             url:`public/image2.png`,  //50픽셀
@@ -87,7 +101,7 @@ function MapAPI() {
 
         // 마커 옵션 2
         const markerOptions2 = {
-          position: position.destinationPoint(10, 300), // 90도 방향으로 15m 떨어진 위치
+          position: position2.destinationPoint(0, 0), // 90도 방향으로 15m 떨어진 위치
           map: mapRef.current,
           icon: {
             url:`public/image3.png`,  //50픽셀
@@ -99,7 +113,7 @@ function MapAPI() {
 
         // 마커 옵션
         const markerOptions3 = {
-          position: position.destinationPoint(40, -200), // 90도 방향으로 15m 떨어진 위치
+          position: position3.destinationPoint(0, 0), // 90도 방향으로 15m 떨어진 위치
           map: mapRef.current,
           icon: {
             url:`public/image4.png`,  //50픽셀
@@ -117,6 +131,7 @@ function MapAPI() {
         
         // 마커 추가 (3)
         const marker3 =  new naver.maps.Marker(markerOptions3);
+
       
         // 정보창 컴포넌트 HTML 문자열로 변환
         const contentString = ReactDOMServer.renderToString(      
@@ -137,14 +152,56 @@ function MapAPI() {
           pixelOffset: new naver.maps.Point(0, -10),
         });
 
+        
+  
         // 마커 클릭 시 정보창 열기
         naver.maps.Event.addListener(marker, "click", () => {
           if (infowindow.getMap()) {
             infowindow.close();
           } else {
-            infowindow.open(mapRef.current, marker);
+            infowindow.open(mapRef.current, marker); // 정보창 열기
+            const profileButton = document.querySelector('.click-btn'); 
+            if (profileButton) {
+              profileButton.addEventListener('click', () => {  // 프로필 가기 이벤트
+                goUserProflie();
+              });
+            }
           }
         });
+
+        // 마커 클릭 시 정보창 열기
+        naver.maps.Event.addListener(marker2, "click", () => {
+          if (infowindow.getMap()) {
+            infowindow.close();
+          } else {
+            infowindow.open(mapRef.current, marker2); // 정보창 열기
+            const profileButton = document.querySelector('.click-btn'); 
+            if (profileButton) {
+              profileButton.addEventListener('click', () => {  // 프로필 가기 이벤트
+                goUserProflie();
+              });
+            }
+          }
+        });
+
+              
+                    // 마커 클릭 시 정보창 열기
+        naver.maps.Event.addListener(marker3, "click", () => {
+          if (infowindow.getMap()) {
+            infowindow.close();
+          } else {
+            infowindow.open(mapRef.current, marker3); // 정보창 열기
+            const profileButton = document.querySelector('.click-btn'); 
+            if (profileButton) {
+              profileButton.addEventListener('click', () => {  // 프로필 가기 이벤트
+                goUserProflie();
+              });
+            }
+          }
+        });
+
+
+  
 
         // // 정보창 처음에 열기
         // infowindow.open(mapRef.current, marker);
@@ -165,11 +222,12 @@ function MapAPI() {
       }
     };
   
+
     
 
   return (
     <>
-     
+    
       <div className='map-box'>
 
         {/* 산책 정보 표시 */}

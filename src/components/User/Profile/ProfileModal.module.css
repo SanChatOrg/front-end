@@ -1,5 +1,11 @@
 /* ProfileModal.module.css */
 
+
+.test:hover {
+  cursor: pointer;
+  background-color: red;
+}
+
 /* 프로필 모달 전체 스타일 */
 .ProfileModal {
     display: flex;

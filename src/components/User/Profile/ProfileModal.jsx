@@ -1,8 +1,9 @@
 import React from "react";
 import styles from "./ProfileModal.module.css";  // CSS 모듈
 
+
 function ProfileModal({ image, name, info, dogList, walkStatus, goUserProflie }) {
-  
+
   return (
     <div>
       {/* 프로필 모달 */}
@@ -18,8 +19,8 @@ function ProfileModal({ image, name, info, dogList, walkStatus, goUserProflie })
               <img src="src/assets/dog-paw-inactive.png" alt="Inactive" />
             )}
           </div>
-          <div className={styles.ProfileModalFollow} onClick={goUserProflie}>
-            <button>프로필 보기</button>
+          <div className={styles.ProfileModalFollow} >
+            <button className='click-btn'> 프로필 보기</button>
           </div>
         </div>
 
@@ -31,7 +32,7 @@ function ProfileModal({ image, name, info, dogList, walkStatus, goUserProflie })
           </div>
 
           {/* 하단 섹션 */}
-          <div className={styles.ProfileModalRightBottom}>
+          <div className={styles.ProfileModalRightBottom} >
             <div className={styles.ProfileModalDogList}>
               {/* 강아지 목록 */}
               {dogList.map((dog, index) => (
