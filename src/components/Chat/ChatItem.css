@@ -1,7 +1,7 @@
 .chatroom-item {
   display: flex;
   justify-content: space-between;
-  padding: 12px;
+  padding: var(--chat-padding-default) var(--chat-padding-larger);
 
 }
 

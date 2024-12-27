@@ -19,7 +19,13 @@
     --gray: #CCCCCC;
     --black: #0E0E0E;
     --white: #FFFEF9;
-    --chat-input-default-color: #EDEDED;
+    --chat-input-color-default: #EDEDED;
+    --chat-input-color-send: #F5EDD8;
+    --chat-background-color-default: #F5F5F7;
+    --chat-padding-default: 10px;
+    --chat-padding-larger: 20px;
+    --chat-radius-default: 5px;
+    --chat-radius-larger: 10px;
 }
 
 

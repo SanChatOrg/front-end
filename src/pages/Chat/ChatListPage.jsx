@@ -5,10 +5,15 @@ import ChatSearch from "../../components/Chat/ChatSearch";
 function ChatListPage() {
   return (
     <>
-      <ChatSearch/>
+      {/* 채팅방 목록 페이지 */}
+      <div className="chat-list-container">
 
-      <div className="chat-container">
+        {/* 채팅방 검색 */}
+        <ChatSearch/>
+
+        {/* 채팅방 목록 */}
         <ChatList/>
+        
       </div>
     </>
   );

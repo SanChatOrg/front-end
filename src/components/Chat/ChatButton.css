@@ -1,4 +1,4 @@
-.chat-search-btn {
+.chat-btn {
   border: none;
   appearance: none;
   height: 38px;
@@ -6,10 +6,10 @@
   background-color: transparent;
 }
 
-.chat-search-btn:hover {
+.chat-btn:hover {
   cursor: pointer;
 }
 
-.chat-search-btn > img {
+.chat-btn > img {
   width: 100%;
 }
