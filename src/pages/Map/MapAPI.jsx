@@ -15,8 +15,8 @@ function MapAPI() {
   const navigate = useNavigate();
 
   // 프로필 가기 (네비게이트)
-  const goUserProflie = () => { 
-    navigate(`${PATHS.USER.PROFILE}`);
+  const goUserProflie = (userId) => { 
+    navigate(`${PATHS.USER.PROFILE}`,{state : userId});
 
   };
 
@@ -39,13 +39,32 @@ function MapAPI() {
     }, []); 
 
 
-    // 유저 정보 임시 값
-    const UserProfileData = {   image : 'src/assets/img/user/ex_user_profile_03.png',
+    // 유저 정보 배열로 받기
+    // 마커에 찍는 이미지는 따로 원형으로 마커용 이미지를 생성해야할 것 같음.
+    const UserProfileData = 
+      [{  image : 'src/assets/img/user/ex_user_profile_03.png',
+      name : '마루콩콩콩',
+      info : ' 마루 멍챗 맞팔 해요 ~',
+      dogList : ["마루"],
+      walkStatus : true,
+      userId : 'maru123',
+      position : new naver.maps.LatLng(37.5799, 127.200564)},
+      {image : 'src/assets/img/user/ex_user_profile_04.png',
       name : '브라운박사',
       info : ' 7 강아지 키우고 있는 브라운 박사 ! 입니다.',
       dogList : ["레오", "헥토파스칼", "감자"],
-      walkStatus : false,
-    };
+      walkStatus : true,
+      userId : 'backbrown',
+      position : new naver.maps.LatLng(37.5762414, 127.199533)},
+      {image : 'src/assets/img/user/ex_user_profile_02.png',
+      name : '시파주인',
+      info : '입력한 정보가 없습니다.',
+      dogList : ["모모"],
+      walkStatus : true,
+      userId : 'sibamomo22',
+      position : new naver.maps.LatLng(location.latitude, location.longitude)}
+      ]
+    ;
 
 
     // 지도 불러오기
@@ -54,18 +73,6 @@ function MapAPI() {
       const { naver } = window;
 
       if (naver) {
-
-        // const HOME_PATH = window.HOME_PATH || ".";
-        const position = new naver.maps.LatLng(location.latitude, location.longitude);
-        const position2 = new naver.maps.LatLng(
-          37.5762414
-          ,
-          127.199533);
-        const position3 = new naver.maps.LatLng( 
-          37.5799
-          ,
-          127.200564
-          );
 
         // 지도 객체 생성하기기
         const mapOptions = {
@@ -85,124 +92,79 @@ function MapAPI() {
         };
 
         // 네이버 지도 객체 생성
-        mapRef.current = new naver.maps.Map(mapContainer.current, mapOptions);
+        mapRef.current = new naver.maps.Map(mapContainer.current, mapOptions);        
 
-        // 마커 옵션 1
-        const markerOptions = {
-          position: position.destinationPoint(0, 0), // 90도 방향으로 15m 떨어진 위치
-          map: mapRef.current,
-          icon: {
-            url:`public/image2.png`,  //50픽셀
-            size: new naver.maps.Size(100, 100),
-            origin: new naver.maps.Point(0, 0),
-            // anchor: new naver.maps.Point(25, 26),
-          },
-        };
-
-        // 마커 옵션 2
-        const markerOptions2 = {
-          position: position2.destinationPoint(0, 0), // 90도 방향으로 15m 떨어진 위치
-          map: mapRef.current,
-          icon: {
-            url:`public/image3.png`,  //50픽셀
-            size: new naver.maps.Size(100, 100),
-            origin: new naver.maps.Point(0, 0),
-            // anchor: new naver.maps.Point(25, 26),
-          },
-        };
-
-        // 마커 옵션
-        const markerOptions3 = {
-          position: position3.destinationPoint(0, 0), // 90도 방향으로 15m 떨어진 위치
-          map: mapRef.current,
-          icon: {
-            url:`public/image4.png`,  //50픽셀
-            size: new naver.maps.Size(100, 100),
-            origin: new naver.maps.Point(0, 0),
-            // anchor: new naver.maps.Point(25, 26),
-          },
-        };
-        
-        // 마커 추가 (1)
-        const marker =  new naver.maps.Marker(markerOptions);
-
-        // 마커 추가 (2)
-        const marker2 =  new naver.maps.Marker(markerOptions2);
-        
-        // 마커 추가 (3)
-        const marker3 =  new naver.maps.Marker(markerOptions3);
-
-      
         // 정보창 컴포넌트 HTML 문자열로 변환
-        const contentString = ReactDOMServer.renderToString(      
-        <ProfileModal      
-          image={UserProfileData.image} 
-          name={UserProfileData.name} 
-          info={UserProfileData.info} 
-          dogList={UserProfileData.dogList}  
-          walkStatus={UserProfileData.walkStatus}
-          goToProfile={goUserProflie}
-        />      
-      );
+        const contentString = [];
 
         // 정보창 생성
-        const infowindow = new naver.maps.InfoWindow({
-          content: contentString,
+        const infowindow = [];
+
+        // 마커 옵션
+        const markerOptions = [];
+
+        // 마커 배열
+        const marker = [];
+
+        // 위치 값 
+
+        for(let n = 0 ; n < UserProfileData.length; n++){
+
+        // 마커 옵션 만들기
+          markerOptions[n] = {
+          position: UserProfileData[n].position.destinationPoint(0, 0), // 90도 방향으로 15m 떨어진 위치
+          map: mapRef.current,
+          icon: {
+            url: `/image${n}.png`,
+            size: new naver.maps.Size(100, 100),
+            origin: new naver.maps.Point(0, 0),
+            // anchor: new naver.maps.Point(25, 26),
+          },
+        };
+
+          // 마커 추가하기
+          marker[n] =  new naver.maps.Marker(markerOptions[n]);
+
+
+          // info 데이터 
+          contentString[n] = ReactDOMServer.renderToString(      
+            <ProfileModal      
+              image={UserProfileData[n].image} 
+              name={UserProfileData[n].name} 
+              info={UserProfileData[n].info} 
+              dogList={UserProfileData[n].dogList}  
+              walkStatus={UserProfileData[n].walkStatus}
+              goToProfile={goUserProflie}
+            />      
+          );
+
+          
+          // info 맵에 추가 
+         infowindow[n] = new naver.maps.InfoWindow({
+          content: contentString[n],
           anchorSize: new naver.maps.Size(15, 5),
           pixelOffset: new naver.maps.Point(0, -10),
         });
 
-        
-  
-        // 마커 클릭 시 정보창 열기
-        naver.maps.Event.addListener(marker, "click", () => {
-          if (infowindow.getMap()) {
-            infowindow.close();
-          } else {
-            infowindow.open(mapRef.current, marker); // 정보창 열기
-            const profileButton = document.querySelector('.click-btn'); 
-            if (profileButton) {
-              profileButton.addEventListener('click', () => {  // 프로필 가기 이벤트
-                goUserProflie();
-              });
-            }
-          }
-        });
 
-        // 마커 클릭 시 정보창 열기
-        naver.maps.Event.addListener(marker2, "click", () => {
-          if (infowindow.getMap()) {
-            infowindow.close();
+         // 마커 클릭 시 정보창 열기 이벤트
+        naver.maps.Event.addListener(marker[n], "click", () => {
+          if (infowindow[n].getMap()) {
+            infowindow[n].close();
           } else {
-            infowindow.open(mapRef.current, marker2); // 정보창 열기
+            infowindow[n].open(mapRef.current, marker[n]); // 정보창 열기
             const profileButton = document.querySelector('.click-btn'); 
             if (profileButton) {
               profileButton.addEventListener('click', () => {  // 프로필 가기 이벤트
-                goUserProflie();
-              });
-            }
-          }
-        });
-
-              
-                    // 마커 클릭 시 정보창 열기
-        naver.maps.Event.addListener(marker3, "click", () => {
-          if (infowindow.getMap()) {
-            infowindow.close();
-          } else {
-            infowindow.open(mapRef.current, marker3); // 정보창 열기
-            const profileButton = document.querySelector('.click-btn'); 
-            if (profileButton) {
-              profileButton.addEventListener('click', () => {  // 프로필 가기 이벤트
-                goUserProflie();
+                goUserProflie(UserProfileData[n].userId);
               });
             }
           }
         });
 
 
-  
-
+        }
+   
         // // 정보창 처음에 열기
         // infowindow.open(mapRef.current, marker);
       }
