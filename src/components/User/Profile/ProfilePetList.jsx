@@ -1,6 +1,11 @@
 import './ProfilePetList.css';
 
-function ProfilePetList({userName, dogList}) {
+function ProfilePetList({userName, dogList, onPetSelection}) {
+    const handleSelectPet = (pet) => {
+        if (onPetSelection) {
+            onPetSelection(pet); // 상위 컴포넌트로 선택 항목 전달
+        }
+    }
 
   return (
     
@@ -10,11 +15,11 @@ function ProfilePetList({userName, dogList}) {
             <div className='pet-title'> <span> {userName}</span> 님의 애완견</div>
             <div className='pet-list'>
 
-            {dogList.map((dog, index) => (
-            <div className='pet-profile' key={index}>
+            {dogList.length > 0 && dogList.map((dog, index) => (
+            <div className='pet-profile' key={index} onClick={() => handleSelectPet(dog.dogNo)}>
                 <div className='pet-profile-img'> <img src=''/> </div> 
                 <div className='pet-profile-gender'> <img src='/src/assets/pet-Male.png'/> </div>
-                <div  className='pet-profile-name'> {dog} </div>
+                <div  className='pet-profile-name'> {dog.dogName} </div>
             </div>
             ))}
          
