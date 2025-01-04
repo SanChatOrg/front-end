@@ -5,6 +5,7 @@ import ReactDOMServer from 'react-dom/server';
 
 import './MapAPI.css';
 import ProfileModal from '../../components/User/Profile/ProfileModal';
+import MapWalkDisplay from './MapWalkDisplay';
 
 
 
@@ -79,6 +80,31 @@ function MapAPI() {
         }
     });
 
+
+    const end = useCallback(() => {
+      const data = {
+        name: "user123", // 사용자 아이디 (예시)
+        date: new Date().toLocaleString(), // 현재 날짜 및 시간
+        latitude: location.latitude, // 위도
+        longitude: location.longitude, // 경도
+        type: "CLOSE", // 종료 타입
+      };
+  
+      if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+        // 데이터 전송
+        ws.current.send(JSON.stringify(data));
+        console.log("Close request sent:", data);
+  
+       
+        ws.current.close(); // 소켓 닫기
+        setUserProfileData([]); // 마커 초기화 
+      }
+
+
+    });
+
+
+
     const send = useCallback(() => {
         if(!chkLog) {
             // if(name === "") {
@@ -95,7 +121,8 @@ function MapAPI() {
                 name,       // user 아이디 
                 date: new Date().toLocaleString(), // 날짜
                 latitude : location.latitude, // 위도
-                longitude : location.longitude // 경도도
+                longitude : location.longitude, // 경도
+                type : 'LOCATION'
             };  //전송 데이터(JSON)
 
             const temp = JSON.stringify(data);
@@ -130,27 +157,50 @@ function MapAPI() {
     //webSocket
 
 
-    // // 위치 변화를 감지
-    // useEffect(() => {
-    //     const watchId = navigator.geolocation.watchPosition(
-    //         (position) => {
-    //             setLocation({
-    //                 latitude: position.coords.latitude,
-    //                 longitude: position.coords.longitude,
-    //             });
-    //             send(); // 위치가 변경될 때마다 WebSocket 전송
-    //         },
-    //         (error) => console.error("위치 감지 실패:", error),
-    //         { enableHighAccuracy: true }
-    //     );
+    ///////////////////////////////////////////////////////
 
-    //     return () => {
-    //         navigator.geolocation.clearWatch(watchId);
-    //     };
-    // }, [send]);
+
+      // 초기 위치 설정 (예시: 서울의 위도, 경도)
+      const [latitude, setLatitude] = useState(37.5665);  // 서울 위도
+      const [longitude, setLongitude] = useState(126.9780);  // 서울 경도
+    
+      const earthRadius = 6371000;  // 지구 반지름 (단위: 미터)
+      const distance = 100;  // 100미터씩 이동
+    
+      // 위도, 경도를 100미터씩 임의로 이동시키는 함수
+      const moveByDistance = (lat, lon, distance) => {
+        // 위도 1도는 약 111킬로미터(111,000미터)
+        const deltaLat = distance / earthRadius;
+    
+        // 경도는 위도에 따라 달라짐, 적도에서 1도는 111킬로미터
+        const deltaLon = distance / (earthRadius * Math.cos(lat * Math.PI / 180));
+    
+        // 새로운 위도, 경도 계산
+        const newLat = lat + deltaLat * (180 / Math.PI);  // 위도 변경
+        const newLon = lon + deltaLon * (180 / Math.PI);  // 경도 변경
+    
+        return { newLat, newLon };
+      };
+    
+      // 100미터씩 이동하며 위치 업데이트하는 함수
+      const changeLocation = () => {
+        const newLocation = moveByDistance(latitude, longitude, distance);
+        setLatitude(newLocation.newLat);
+        setLongitude(newLocation.newLon);
+      };
+    
+      // 5초마다 위치를 100미터씩 이동
+      useEffect(() => {
+        const interval = setInterval(() => {
+          changeLocation();
+        }, 5000); // 5초마다 이동
+        console.log(latitude, longitude);
+        // 컴포넌트가 언마운트 될 때 인터벌 정리
+        return () => clearInterval(interval);
+      }, [latitude, longitude]);
     
 
-
+ /////////////////////////////////////
 
     const navigate = useNavigate();
 
@@ -174,7 +224,7 @@ function MapAPI() {
         dogList: [""],
         walkStatus: true,
         userId: '',
-        position: new naver.maps.LatLng(null, null), // 초기 값
+        position: new naver.maps.LatLng(latitude, longitude), // 초기 값
     }]);
 
       // 마커 데이터 관리 
@@ -386,7 +436,8 @@ function MapAPI() {
                     id='name' 
                     value={name} 
                     onChange={(event => setName(event.target.value))}/>
-      <input type='button' value='산책 시작작' id='btnSend' onClick={send}/>
+      <input type='button' value='산책 시작' id='btnSend' onClick={send}/>
+      <input type='button' value='산책 종료' id='end' onClick={end}/>
       <div className='map-box'>
 
         {/* 산책 정보 표시 */}
@@ -417,7 +468,7 @@ function MapAPI() {
             className='naver-map'
         ></div>
 
-
+        <MapWalkDisplay/>
       </div>
     </>
   );
