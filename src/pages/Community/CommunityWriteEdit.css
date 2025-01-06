@@ -44,6 +44,13 @@ div {
   border-bottom: 1px solid #b6b6b6;
 }
 
+/* 사진 아이콘 */
+.photo-icon {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+}
+
 /* 업로드버튼 */
 .img-btn {
   display: flex;
@@ -78,6 +85,7 @@ div {
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: none;
+  margin-top: 10px;
 }
 
 /* 내용 입력 */
