@@ -18,13 +18,16 @@ function MapWalkDisplay2({ setIsWalkStart  , isDogSelect, setIsDogSelect, DogLis
   return (
     <>
 
-    <select onChange={handleDogListChange}> 
+ 
+
+      <div className='walk-box'> 
+        
+      <select onChange={handleDogListChange}> 
       <option> 선택 안함 </option>
       <option> 공멍 </option>
       <option> 도레미파솔솔 </option>
     </select>
 
-      <div className='walk-box'> 
         <div className='walk-part-top'> 
           {/* <div className='walk-part-dog-list'> 
             <div className='walk-part-dog-profile' > 

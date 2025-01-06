@@ -3,7 +3,6 @@
 /*  map-walk-display :: 하단 산책 정보 */
 
 .map-walk-display {
-    position: absolute;
     top: 750px;
     left: 50px;
     display: flex;

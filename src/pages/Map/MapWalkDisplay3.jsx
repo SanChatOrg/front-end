@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './MapWalkDisplay3.css'
 
-function MapWalkDisplay3({isWalking, isPaused, walkStart,walkPaused,walkStop,formatTime, elapsedTime }) {
+function MapWalkDisplay3({isWalking, isPaused, walkStart,walkPaused,walkStop,formatTime, elapsedTime , setDistance, distance}) {
 
   // 버튼 보이는 거는 나중에 컨트롤
 
@@ -11,8 +11,8 @@ function MapWalkDisplay3({isWalking, isPaused, walkStart,walkPaused,walkStop,for
   return (
     <>
     <div>
-      <h1>산책 시간 측정</h1>
       <p>경과 시간: {formatTime(elapsedTime)}</p>
+      <p>산책 거리: {distance.toFixed(2)}m</p>
       <button onClick={walkStart}>
         {isWalking && !isPaused ? "계속" : "시작"}
       </button>

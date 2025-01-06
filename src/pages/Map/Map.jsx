@@ -43,14 +43,12 @@ function Map() {
   return (
     <>
 
-
       {/* <div> 서버에서 받아온 데이터 : {mapData} </div>
       <div> 서버로 데이터 보내기 : <button onClick={postData}> 보내기 </button> </div> */}
 
  
-      {/* 지도 영역 컴포넌트트 */}
+      {/* 지도 영역 컴포넌트 */}
       <MapAPI3/>
-      
       
       {/* <ProfileModal      
           image={UserProfileData.image} 

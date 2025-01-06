@@ -8,13 +8,14 @@ import ProfileModal from '../../components/User/Profile/ProfileModal';
 import MapWalkDisplay from './MapWalkDisplay';
 import MapWalkDisplay2 from './MapWalkDisplay2';
 import MapWalkDisplay3 from './MapWalkDisplay3';
+import axios from 'axios';
+
 
 
 
 function MapAPI3() {
 
-
-  // 자식 컴포넌트에서 사용 됨됨
+  const EARTH_RADIUS = 6371000; // 지구 반지름 (미터)
 
   // 산책 기록 데이터
   const [isDogSelect, setIsDogSelect] = useState(true);
@@ -29,18 +30,18 @@ function MapAPI3() {
   const [location, setLocation] = useState({latitude: 0 , longitude : 0});
 
   // 사용자 정보
-  const [UserProfileData, setUserProfileData] = useState([{
+  const [UserProfileData, setUserProfileData] = useState({
         image: 'src/assets/img/user/ex_user_profile_02.png',
-        name: '',
+        name: '혜주',
         info: '입력한 정보가 없습니다.',
-        dogList: [""],
+        dogList: ["공멍"],
         walkStatus: true,
-        userId: '',
-        // position: new naver.maps.LatLng(0, 0),
-    }]);
+        userId: 'hyeju',
+        position: new naver.maps.LatLng(0, 0)
+    });
 
 
-  // 산책 종료 후 최종 기록 데이터import MapWalkDisplay from './MapWalkDisplay';
+  // 산책 종료 후 "최종 기록 데이터"
   const [partDogList, setPartDogList] = useState([]); // 참여한 강아지
   const [walkDate , setWalkDate] = useState(); // 산책 참여 일자 
   const [walkTimeStart, setWalkTimeStart] = useState(); // 산책 시작 시간
@@ -50,6 +51,53 @@ function MapAPI3() {
   // 산책 시작함 
   const [isWalkStart, setIsWalkStart] = useState(false);
 
+  // 산책 상태 관리 변수
+  const [isWalking, setIsWalking] = useState(false); // 산책 상태
+  const [isPaused, setIsPaused] = useState(false); // 일시정지 상태
+  const [isStopped, setIsStopped] = useState(false);
+
+  const [elapsedTime, setElapsedTime] = useState(0); // 경과 시간 (초 단위)
+  const timerRef = useRef(null); // 타이머 ID 저장
+  const [autoMoveInterval, setAutoMoveInterval] = useState(null); // 인터벌 상태 관리
+  const [distance, setDistance] = useState(0); // 거리 계산 저장
+
+  const navigate = useNavigate();
+
+  // 프로필 가기 (네비게이트)
+  const goUserProflie = (userId) => { 
+    navigate(`${PATHS.USER.PROFILE}`,{state : userId});
+
+  };
+
+/////////////////////////////
+/////////////////////////////
+/////////////////////////////
+
+  // 내 위치 가져오기
+
+  useEffect(() => {
+    navigator.geolocation.watchPosition(
+      (position) => {
+        setLocation({latitude:position.coords.latitude , longitude : position.coords.longitude}); // 위도 경도 값
+
+        setUserProfileData((prevData) => ({
+          ...prevData, // 기존 데이터 유지
+          position: new naver.maps.LatLng(
+            position.coords.latitude,
+            position.coords.longitude
+          ),
+        }));
+      },
+    );
+    console.log(location); 
+  }, []); 
+
+
+
+/////////////////////////////
+/////////////////////////////
+/////////////////////////////
+ 
 
 
   useEffect(()=>{
@@ -79,28 +127,6 @@ function MapAPI3() {
   
     // if 강아지가 하나라도 선택되었다면 버튼 나타나기 [산책 시작하기]
   } 
-
-
-  // // 시작, 일시정지 , 종료  함수
-  // const walkStart = () => { // 시작 함수 
-
-  // }
-
-  // const walkStop = () => { // 종료 함수
-
-  // }
-
-  // const walkPaused = () => { // 일시정지 함수수
-
-  // }
-
-  const [isWalking, setIsWalking] = useState(false); // 산책 상태
-  const [isPaused, setIsPaused] = useState(false); // 일시정지 상태
-
-  const [isStopped, setIsStopped] = useState(false);
-
-  const [elapsedTime, setElapsedTime] = useState(0); // 경과 시간 (초 단위)
-  const timerRef = useRef(null); // 타이머 ID 저장
 
 
   // 기록
@@ -146,76 +172,379 @@ function MapAPI3() {
   
 
 
+    // 거리 계산 함수 (10m 씩 이동함)
+    // 100미터씩 이동하는 로직
+
   const resultDate = () => {
     console.log("최종 데이터 입니다 ---------------------");
     console.log(walkDate, walkTimeStart, walkTimeEnd);
     console.log(walkTime , "최종 산책시간");
+    console.log(walkDistance, "m 최종 산책 거리 ");
     console.log("-------------------------------------");
+     
   }
 
-  // 시작 함수
-  const walkStart = () => {
-    if (isStopped){
-     // 시작할때 초기화 해도 될듯 ㅇㅇ
-     setWalkDate(""); // 산책 날짜 초기화
-     setWalkTimeStart(""); // 시작 시간 초기화
-     setWalkTimeEnd(""); // 종료 시간 초기화
-     setWalkTime("");
-     setIsStopped(false);
-    }
+ 
+/////////////////////////////
+/////////////////////////////
+/////////////////////////////
 
-    if (!isWalking) {
-      setWalkTimeStart(getLocalTime());
-      setWalkDate(getLocalDate());
-      setIsWalking(true);
-      setIsPaused(false);
 
-      timerRef.current = setInterval(() => {
-        setElapsedTime((prevTime) => prevTime + 1);
-      }, 1000);
-    } else if (isPaused) {
-      // 일시정지 상태에서 다시 시작
-      setIsPaused(false);
-      timerRef.current = setInterval(() => {
-        setElapsedTime((prevTime) => prevTime + 1);
-      }, 1000);
+    
+useEffect(() => {
+  const { naver } = window;
+  if (!naver) return;
+
+  const map = initializeMap(naver, mapContainer.current);
+
+
+
+  const marker = createMarker(naver, map, UserProfileData);
+    // 맵의 초기 중심을 마커의 위치로 설정
+    map.setCenter(marker.getPosition());
+  createInfoWindow(naver, marker, UserProfileData, goUserProflie);
+  
+}, [location, UserProfileData]);
+
+const initializeMap = (naver, mapContainer) => {
+  const mapOptions = {
+    center: new naver.maps.LatLng(location.latitude, location.longitude),
+    zoom: 10,
+    minZoom: 18,
+    useStyleMap: false,
+    mapTypeControl: false,
+    mapTypeControlOptions: {
+      style: naver.maps.MapTypeControlStyle.BUTTON,
+      position: naver.maps.Position.TOP_LEFT,
+    },
+    zoomControl: false,
+    zoomControlOptions: {
+      position: naver.maps.Position.TOP_RIGHT,
+    },
+  };
+  
+  return new naver.maps.Map(mapContainer, mapOptions);
+};
+
+const createMarker = (naver, map, UserProfileData) => {
+  const markerOptions = {
+    position: UserProfileData.position,
+    map: map,
+    icon: {
+      url: `/image2.png`,
+      size: new naver.maps.Size(100, 100),
+      origin: new naver.maps.Point(0, 0),
+    },
+  };
+  
+  return new naver.maps.Marker(markerOptions);
+};
+  
+const createInfoWindow = (naver, marker, UserProfileData, goUserProflie) => {
+
+  const contentString = ReactDOMServer.renderToString(
+    <ProfileModal
+      image={UserProfileData.image}
+      name={UserProfileData.name}
+      info={UserProfileData.info}
+      dogList={UserProfileData.dogList}
+      walkStatus={UserProfileData.walkStatus}
+      goToProfile={goUserProflie}
+    />
+  );
+
+  const infowindow = new naver.maps.InfoWindow({
+    content: contentString,
+    anchorSize: new naver.maps.Size(15, 5),
+    pixelOffset: new naver.maps.Point(0, -10),
+  });
+
+  // 마커 클릭 시 정보창 열기 이벤트
+  naver.maps.Event.addListener(marker, "click", () => {
+    if (infowindow.getMap()) {
+      infowindow.close();
+    } else {
+      infowindow.open(marker.getMap(), marker);
+      const profileButton = document.querySelector(".click-btn");
+      if (profileButton) {
+        profileButton.addEventListener("click", () => {
+          goUserProflie(UserProfileData.userId);
+        });
+      }
     }
+  });
+
+  return infowindow;
+};
+ 
+/////////////////////////////
+/////////////////////////////
+/////////////////////////////
+
+  // 하버사인 공식을 사용한 거리 계산
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const toRad = (value) => (value * Math.PI) / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(toRad(lat1)) *
+        Math.cos(toRad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return EARTH_RADIUS * c;
   };
 
-  // 일시정지 함수
-  const walkPaused = () => {
-    if (isWalking && !isPaused) {
-      clearInterval(timerRef.current);
-      setIsPaused(true);
+
+// 위치 변경 업데이트
+const updatePosition = (position) => {
+  const { latitude: newLat, longitude: newLon } = position.coords;
+
+  if (UserProfileData.position) {
+    const newDistance = calculateDistance(
+      UserProfileData.position.lat(),
+      UserProfileData.position.lng(),
+      newLat,
+      newLon
+    );
+    setDistance((prevDistance) => prevDistance + newDistance);
+  }
+
+  setUserProfileData((prevData) => ({
+    ...prevData,
+    position: new naver.maps.LatLng(newLat, newLon),
+  }));
+};
+
+// 100미터씩 이동하는 로직
+const moveAutomatically = () => {
+  setUserProfileData((prevData) => {
+    if (!prevData.position) return prevData;
+
+    const moveDistance = 5; // 5 meters
+    const deltaLat = (moveDistance / EARTH_RADIUS) * (180 / Math.PI);
+    const deltaLon =
+      (moveDistance /
+        (EARTH_RADIUS * Math.cos((prevData.position.lat() * Math.PI) / 180))) *
+      (180 / Math.PI);
+
+    const newLatitude = prevData.position.lat() + deltaLat;
+    const newLongitude = prevData.position.lng() - deltaLon;
+
+    const newDistance = calculateDistance(
+      prevData.position.lat(),
+      prevData.position.lng(),
+      newLatitude,
+      newLongitude
+    );
+
+    // 거리 업데이트
+    setDistance((prevDistance) => prevDistance + newDistance);
+  
+    return {
+      ...prevData,
+      position: new naver.maps.LatLng(newLatitude, newLongitude),
+    };
+  });
+};
+/////////////////////////////////////////////////////////
+
+// 시작 함수
+const walkStart = () => {
+  if (isStopped) {
+    // 시작할 때 초기화
+    setWalkDate(""); // 산책 날짜 초기화
+    setWalkTimeStart(""); // 시작 시간 초기화
+    setWalkTimeEnd(""); // 종료 시간 초기화
+    setWalkTime("");
+    setIsStopped(false);
+
+  }
+
+  if (!isWalking) {
+    // 자동 이동 시작
+    setDistance(0);
+    const interval = setInterval(moveAutomatically, 1000); // 1초마다 이동
+    setAutoMoveInterval(interval);
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(updatePosition, console.error, {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 5000,
+      });
+    } else {
+      alert("Geolocation is not supported by this browser.");
     }
-  };
+    
+    
+    setWalkTimeStart(getLocalTime());
+    setWalkDate(getLocalDate());
+    setIsWalking(true);
+    setIsPaused(false);
 
-  // 종료 함수
-  const walkStop = () => {
-    if (isWalking) {
-      // 종료 시간 설정
-      setWalkTimeEnd(getLocalTime());
-      setWalkTime(formatTime(elapsedTime));
-      setIsStopped(true);
+    // 타이머 시작
+    timerRef.current = setInterval(() => {
+      setElapsedTime((prevTime) => prevTime + 1);
+    }, 1000);
 
-      // 타이머 종료 및 상태 업데이트
-      clearInterval(timerRef.current);
-      setIsWalking(false);
-      setIsPaused(false);
-
-        // 상태 초기화
-      setElapsedTime(0); // 경과 시간 초기화
+  } else if (isPaused) {
+    // 일시정지 상태에서 다시 시작
+    const interval = setInterval(moveAutomatically, 1000); // 1초마다 이동
+    setAutoMoveInterval(interval);
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(updatePosition, console.error, {
+        enableHighAccuracy: true,
+        maximumAge: 0,
+        timeout: 5000,
+      });
+    } else {
+      alert("Geolocation is not supported by this browser.");
     }
-  };
-   
+    setIsPaused(false);
+    timerRef.current = setInterval(() => {
+      setElapsedTime((prevTime) => prevTime + 1);
+    }, 1000);
+  }
+};
+
+// 일시정지 함수
+const walkPaused = () => {
+  if (isWalking && !isPaused) {
+    clearInterval(timerRef.current); // 타이머 멈추기
+    clearInterval(autoMoveInterval); // 자동 이동 멈추기
+    setIsPaused(true);
+  }
+};
+const walkStop = () => {
+  if (isWalking) {
+    // 종료 시간 설정
+    setWalkTimeEnd(getLocalTime());
+    setWalkTime(formatTime(elapsedTime));
+    setIsStopped(true);
+
+    // 타이머 종료 및 상태 업데이트
+    clearInterval(timerRef.current);
+    clearInterval(autoMoveInterval); // 자동 이동 멈추기
+    setIsWalking(false);
+    setIsPaused(false);
+
+    // 상태 초기화
+    setElapsedTime(0); // 경과 시간 초기화
+    setWalkDistance(distance.toFixed(2));
+    setDistance(0);
+  }
+};
+
+// 상태 업데이트 후 실행할 함수
+useEffect(() => {
+  if (!isWalking && isStopped) {
+    result();  // 상태가 업데이트된 후 result 함수 실행
+  }
+}, [isWalking, isStopped]); // isWalking 또는 isStopped가 변경되면 실행됨
+
+const result = () => {
+  // 서버로 데이터 보내기 
+  axios.post('http://localhost:8181/walk/walkData', {
+    walkDate: walkDate,
+    walkTimeStart: walkTimeStart,
+    walkTimeEnd: walkTimeEnd,
+    walkDistance: walkDistance,
+    userId: UserProfileData.userId,
+    partDogList: partDogList
+  })
+    .then(response => {
+      console.log(response.data); // 서버의 응답
+    })
+    .catch(error => {
+      console.error(error);
+    });
+};
 
   useEffect(()=> {
     resultDate();
   },[isStopped]);
   
 
+
+  // // 위치 이동 함수
+  // const moveByDistance = (lat, lon, distance) => {
+  //   const earthRadius = 6371000; // 지구 반지름 (미터)
+
+  //   const latRad = (lat * Math.PI) / 180;
+  //   const lonRad = (lon * Math.PI) / 180;
+
+  //   const deltaLat = distance / earthRadius;
+  //   const deltaLon = distance / (earthRadius * Math.cos(latRad));
+
+  //   const newLat = lat + (deltaLat * 180) / Math.PI;
+  //   const newLon = lon + (deltaLon * 180) / Math.PI;
+
+  //   return { newLat, newLon };
+  // };
+
+  // // 자동 이동 시작
+  // const startAutoMove = () => {
+  //   if (autoMoveInterval) {
+  //     // 이전 인터벌이 이미 존재하면, 새로 시작하지 않음
+  //     return;
+  //   }
+
+  //   // 1초마다 10m씩 이동하는 interval 설정
+  //   const interval = setInterval(() => {
+  //     const { newLat, newLon } = moveByDistance(location.latitude, location.longitude, 100);
+
+  //     // 이동한 거리 계산
+  //     const distance = calculateDistance(location.latitude, location.longitude, newLat, newLon);
+
+  //     // 총 이동 거리 업데이트
+  //     setTotalDistance((prevDistance) => prevDistance + distance);
+
+  //     // 위치 업데이트
+  //     setLocation({ latitude: newLat, longitude: newLon });
+
+  //     // 위치에 맞는 네이버 지도 및 마커 업데이트
+  //     setUserProfileData((prevData) => ({
+  //       ...prevData,
+  //       position: new naver.maps.LatLng(newLat, newLon),
+  //     }));
+  //     console.log(newLat, newLon);
+
+  //     // 맵과 마커 업데이트
+  //     updateMapAndMarker(newLat, newLon);
+  //   }, 1000); // 1초마다 100m씩 이동
+
+  //   setAutoMoveInterval(interval); // 인터벌 ID를 상태로 저장
+  // };
+
+  // // 자동 이동 멈추기
+  // const stopAutoMove = () => {
+  //   if (autoMoveInterval) {
+  //     clearInterval(autoMoveInterval); // 인터벌 멈추기
+  //     setAutoMoveInterval(null); // 상태 초기화
+  //   }
+  // };
+
+
+    // 내 위치로 가기
+  
+    const goMyLocation = (e) => {
+    e.preventDefault();
+
+    if (mapRef.current) {
+      const jeju = new naver.maps.LatLng(location.latitude, location.longitude);
+      mapRef.current.setCenter(jeju);
+    } else {
+      console.error("Map instance is not initialized.");
+    }
+  };
+  
+
   return (
     <>
+
+
+
      { isWalkStart ? 
       <MapWalkDisplay3 
       isWalking={isWalking}
@@ -225,6 +554,8 @@ function MapAPI3() {
       walkStop = {walkStop}
       formatTime = {formatTime} 
       elapsedTime = {elapsedTime}
+      distance = {distance}
+      setDistance={setDistance}
       />
       :      
         <MapWalkDisplay2
@@ -235,7 +566,23 @@ function MapAPI3() {
         setIsWalkStart={setIsWalkStart}
         /> }
 
-      
+        <MapWalkDisplay 
+        distance = {distance}
+        elapsedTime = {elapsedTime}
+        formatTime = {formatTime}
+        />
+
+
+        {/* 내 위치 바로가기 */}
+        {/* <div className='map-my-location'> 
+            <button onClick={goMyLocation}> 📍 </button>
+        </div> */}
+        
+          {/* 지도 영역 */}
+          <div
+            ref={mapContainer}
+            className='naver-map'
+        ></div>
 
 
     </>
