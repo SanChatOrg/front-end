@@ -5,12 +5,15 @@ import ProfileImageList from '../../../components/User/Profile/ProfileImageList'
 import ProfilePetList from '../../../components/User/Profile/ProfilePetList';
 import axios from "axios";
 import {useEffect, useState} from "react";
+import ProfileTabMenu from "../../../components/User/Profile/ProfileTabMenu.jsx";
 
 function ProfileMain() {
     const [userProfileData, setUserProfileData] = useState({});
     const [selectedPet, setSelectedPet] = useState(111); // 선택된 pet
-    const [imageList, setImageList] = useState([]); // pet list
+    const [imageList, setImageList] = useState([]); // pet Image list
+    const [badgeList, setBadgeList] = useState([]);
     const [dogList, setDogList] = useState([]);
+    const [isPhoto, setIsPhoto] = useState(true);
 
     // 클릭한 userId 값 받아오기
     const {state} = useLocation();
@@ -29,6 +32,10 @@ function ProfileMain() {
     };
 
     useEffect(() => {
+        if (dogList.length === 1) setSelectedPet(dogList[0].dogNo);
+    }, [dogList]);
+
+    useEffect(() => {
         setData();
     }, []);
 
@@ -37,13 +44,32 @@ function ProfileMain() {
         setSelectedPet(pet === selectedPet ? '' : pet);
     };
 
+    const handleTabSelection = (tab) => {
+        setIsPhoto(tab);
+    }
+
+    const checkIsMyPet = () => {
+        return selectedPet !== '' && dogList.map(dog => dog.dogNo).indexOf(selectedPet) >= 0;
+    }
+
     // pet image list 조회 함수
     const getImageList = async () => {
         let {data} = await axios.get('http://localhost:8181/photo/getImageList?type='
             + (
-                selectedPet !== '' && dogList.map(dog => dog.dogNo).indexOf(selectedPet) >= 0
+                checkIsMyPet()
                     ? 'dog&id=' + selectedPet : 'user&id=' + userProfileData.userNo));
         setImageList(data);
+        console.log(data);
+    }
+
+
+
+    const getBadgeList = async () => {
+        let {data} = await axios.get('http://localhost:8181/badge/getBadgeList?type='
+            + (
+                checkIsMyPet()
+                    ? 'dog&id=' + selectedPet : 'user&id=' + userProfileData.userNo));
+        setBadgeList(data);
         console.log(data);
     }
 
@@ -51,6 +77,7 @@ function ProfileMain() {
         console.log(selectedPet);
         if (userProfileData.userNo === undefined) return;
         getImageList();
+        // getBadgeList();
     }, [userProfileData, selectedPet]);
 
     // 조회해왔다고 치고..
@@ -97,8 +124,9 @@ function ProfileMain() {
                 dogList={dogList || []}
                 onPetSelection={handlePetSelection}
             />
+            <ProfileTabMenu onTabSelection={handleTabSelection} isPhoto={isPhoto} isActivate={checkIsMyPet()} />
             <ProfileImageList
-                imageList={imageList || ['/src/assets/profile-image-001.png', '/src/assets/profile-image-002.png', '/src/assets/profile-image-003.png']}
+                imageList={isPhoto ? imageList : badgeList || ['/src/assets/profile-image-001.png', '/src/assets/profile-image-002.png', '/src/assets/profile-image-003.png']}
             />
 
 
