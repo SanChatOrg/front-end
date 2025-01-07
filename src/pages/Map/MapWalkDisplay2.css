@@ -1,0 +1,85 @@
+.walk-box { 
+    border : 1px solid var(--main-color);
+    /* background-color: var(--sub-color); */
+    padding: 20px 25px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.walk-part-dog-list{
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.walk-part-dog-profile {
+    background-color: #fff;
+    border : 1px solid  #565656;
+    border-radius: 10px;
+    width: 100px;
+    padding: 10px 8px;
+}
+
+
+.walk-part-dog-profile:hover {
+    background-color: var(--sub-color);
+    border: 1px solid var(--main-color);
+}
+
+.walk-part-dog-profile:hover > .walk-part-dog-img
+{
+    background-color: var(--sub-color);
+    border: 1px solid var(--main-color);
+}
+
+.walk-part-dog-profile:hover > .walk-part-dog-name {
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
+}
+
+.walk-part-dog-img {
+    border : 1px solid #565656;
+    border-radius: 100%;
+    width: 100px;
+    height: 100px;
+}
+
+.walk-part-dog-name {
+    background-color: #fff;
+    border : 1px solid #565656;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    color : #565656;
+}
+
+.walk-box-bottom {
+    display: flex;
+    justify-content: center;
+}
+
+.walk-part-info {
+    border : 1px solid var(--main-color);
+    background-color: var(--sub-color);
+    color : var(--main-color);
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+
+
+.walk-part-btn > button {
+    border : 1px solid var(--main-color);
+    background-color: var(--sub-color);
+    color : var(--main-color);
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+    font-size: 15px;
+}

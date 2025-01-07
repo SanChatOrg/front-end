@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './Map.css';
 import MapAPI from './MapAPI';
+import MapAPI2 from './MapAPI2';
+import MapAPI3 from './MapAPI3';
+import MapWalkDisplay from './MapWalkDisplay';
 
 
 
@@ -33,16 +36,19 @@ function Map() {
   
 //   }
   
+
+
+
+
   return (
     <>
-
 
       {/* <div> 서버에서 받아온 데이터 : {mapData} </div>
       <div> 서버로 데이터 보내기 : <button onClick={postData}> 보내기 </button> </div> */}
 
  
-      {/* 지도 영역 컴포넌트트 */}
-      <MapAPI/>
+      {/* 지도 영역 컴포넌트 */}
+      <MapAPI3/>
       
       {/* <ProfileModal      
           image={UserProfileData.image} 
@@ -51,6 +57,8 @@ function Map() {
           dogList={UserProfileData.dogList}  
           walkStatus={UserProfileData.walkStatus}
         />    */}
+
+   
 
 
     </>
