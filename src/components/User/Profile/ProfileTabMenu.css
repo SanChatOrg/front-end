@@ -1,0 +1,22 @@
+/* 탭 컨테이너 */
+.tab-container {
+    display: flex;
+}
+
+/* 탭 버튼 공통 스타일 */
+.tab-button {
+    flex: 1;
+    padding: 10px;
+    background-color: #ddd;
+    color: var(--main-color);
+    border: none;
+    cursor: pointer;
+    outline: none;
+    text-align: center;
+    font-size: 16px;
+}
+
+/* 활성화된 탭 */
+.tab-button.active {
+    background-color: var(--sub-color);
+}

@@ -18,6 +18,8 @@ function ProfileHeader({userName , userInfo , userImage}) {
           <div className='profile-part-left-bottom'>
             {/* 따로 처리 필요 세션에 따라 변경! */}
           <div className='user-profile-follow'> <button> 팔로우 하기 </button>  </div>
+          {/*<div className='user-profile-follow'> <button> 팔로잉 </button>  </div>
+          <div className='user-profile-follow'> <button> 프로필 편집 </button>  </div>*/}
           </div>
         </div>
 
