@@ -4,6 +4,10 @@ import {useContext, Suspense, lazy, useEffect} from 'react';
 import { PATHS } from './paths';
 import Layout from '../common/Layout';
 
+
+// 산책 화면
+const Walk = lazy(() => import('../pages/Walk/Walk.jsx'));
+
 // 지도 화면
 const Map = lazy(() => import('../pages/Map/Map.jsx'));
 
@@ -32,7 +36,8 @@ function AppRouter() {
       <Route element={<Layout/>}>
 
         {/* 지도 페이지 */}
-        <Route path={PATHS.MAP} element={<Map/>}/>
+        <Route path={PATHS.MAP.MAP} element={<Map/>}/>
+        <Route path={PATHS.MAP.WALK} element={<Walk/>}/>
 
         {/* 커뮤니티 페이지 */}
         <Route path={PATHS.COMMUNITY.MAIN} element={<CommunityMain/>}/>

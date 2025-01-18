@@ -2,13 +2,15 @@ import './ProfileHeader.css';
 
 function ProfileHeader({userName , userInfo , userImage}) {
 
+  console.log(userImage);
+
   return (
     
     <div>
  
       <div className='profile-part1'> 
         <div className='profile-part-right'>
-        <div className='user-profile-img'> <img src={userImage}/> </div> 
+        <div className='user-profile-img'> <img src={userImage.photoUrl}/> </div> 
         </div>
         <div className='profile-part-left'>
           <div className='profile-part-left-top'>

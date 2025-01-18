@@ -1,8 +1,11 @@
 import './ProfileMain.css';
 import {useLocation} from 'react-router-dom';
-import ProfileHeader from '../../../components/User/Profile/ProfileHeader';
-import ProfileImageList from '../../../components/User/Profile/ProfileImageList';
-import ProfilePetList from '../../../components/User/Profile/ProfilePetList';
+import ProfileHeader from './ProfileHeader';
+import ProfileImageList from './ProfileImageList';
+import ProfilePetList from './ProfilePetList';
+import ProfileFollow from './ProfileFollow';
+import ProfileFollowList from './ProfileFollowList';
+import ProfilePetInfo from './ProfilePetInfo';
 import axios from "axios";
 import {useEffect, useState} from "react";
 
@@ -11,7 +14,9 @@ function ProfileMain() {
     const [selectedPet, setSelectedPet] = useState(111); // 선택된 pet
     const [imageList, setImageList] = useState([]); // pet list
     const [dogList, setDogList] = useState([]);
-
+    const [followList, setfollowList] = useState([]);
+    const [followerList, setfollowerList] = useState([]);
+    
     // 클릭한 userId 값 받아오기
     const {state} = useLocation();
     console.log(state);
@@ -28,8 +33,30 @@ function ProfileMain() {
         }
     };
 
+    const setFollowList = async () => {
+        try {
+            let {data} = await axios.get('http://localhost:8181/follow/getFollowList?userNo=' + 1);
+            console.log("팔로우리스트" , data);
+            setfollowList(data);
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    };
+
+    const setFollowerList = async () => {
+        try {
+            let {data} = await axios.get('http://localhost:8181/follow/getFollowerList?userNo=' + 1);
+            console.log("팔로워리스트" , data);
+            setfollowerList(data);
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    };
+
+
     useEffect(() => {
         setData();
+      
     }, []);
 
     // pet 선택 함수
@@ -44,27 +71,19 @@ function ProfileMain() {
                 selectedPet !== '' && dogList.map(dog => dog.dogNo).indexOf(selectedPet) >= 0
                     ? 'dog&id=' + selectedPet : 'user&id=' + userProfileData.userNo));
         setImageList(data);
-        console.log(data);
+     
+            const selectedDog = dogList.find(dog => dog.dogNo === selectedPet);
+
+           
+            setSelectedDogData(selectedDog || {});
+        console.log(JSON.stringify(data)+ "눌렸을때 넘어갈 값" , selectedDog);
     }
 
     useEffect(() => {
-        console.log(selectedPet);
+        console.log("selectedPet" , selectedPet);
         if (userProfileData.userNo === undefined) return;
         getImageList();
     }, [userProfileData, selectedPet]);
-
-    // 조회해왔다고 치고..
-
-    const UserProfileData = {
-        image: '/src/assets/img/user/ex_user_profile_02.png',
-        name: '마루콩콩콩',
-        info: ' 마루 멍챗 맞팔 해요 ~',
-        dogList: ["마루", "콩콩"],
-        walkStatus: true,
-        userId: 'maru123',
-        position: new naver.maps.LatLng(37.5799, 127.200564),
-        imageList: ['/src/assets/profile-image-001.png', '/src/assets/profile-image-002.png', '/src/assets/profile-image-003.png']
-    };
 
 
     function handleCreateUserTest() {
@@ -83,6 +102,35 @@ function ProfileMain() {
         // console.log(data);
     }
 
+
+
+
+    const [isFollow, setIsFollow] = useState(false);
+    const [isFollowList, setIsFollowList] = useState(false);
+  
+    const followBtnClick = () => {
+        setFollowList();
+        setIsFollow(true);
+        setIsFollowList(true);
+    }
+    const followerBtnClick = () => {
+        setFollowerList();
+        setIsFollow(false);
+        setIsFollowList(true);
+    }
+    const followBackBtnClick = () => {
+        setIsFollowList(false);
+        console.log("뒤로가자");
+    }
+
+    const [selectedDogData, setSelectedDogData] = useState({});
+
+    // pet 선택
+    const petStateClick = (pet) => {
+        console.log("상위로올라온 pet " , pet);
+        setPetState(pet);
+    }
+
     return (
 
         <div>
@@ -92,14 +140,62 @@ function ProfileMain() {
                 userInfo={userProfileData.userIntro || ''}
                 userImage={userProfileData.photo || '#'}
             />
+
+            <ProfileFollow 
+                isFollowList = {isFollowList}
+                followBackBtnClick = {followBackBtnClick}
+                isFollow = {isFollow}
+                setIsFollow = {setIsFollow}
+                followBtnClick = {followBtnClick}
+                followerBtnClick = {followerBtnClick}
+          />
+
+
+            {isFollowList ? 
+            <> 
+  
+
+            <ProfileFollowList
+                isFollowList = {isFollowList}
+                isFollow = {isFollow}
+                setIsFollow = {setIsFollow}
+                followBtnClick = {followBtnClick}
+                followerBtnClick = {followerBtnClick}
+                followList = {followList}
+                followerList = {followerList}
+            /> 
+            </>
+           
+            :
+
+            <>
+
+         
+        
             <ProfilePetList
                 userName={userProfileData.userName || ''}
                 dogList={dogList || []}
                 onPetSelection={handlePetSelection}
+
             />
+
+     
+            <ProfilePetInfo 
+                selectedDogData = {selectedDogData}
+            />
+
+
             <ProfileImageList
-                imageList={imageList || ['/src/assets/profile-image-001.png', '/src/assets/profile-image-002.png', '/src/assets/profile-image-003.png']}
-            />
+                 imageList={imageList || []}
+               
+             />
+
+            </>
+         
+
+            }
+            
+          
 
 
         </div>);

@@ -4,7 +4,10 @@
 export const PATHS = {
 
   // 지도 페이지
-  MAP: "/map",
+  MAP: {
+    MAP : "/map",
+    WALK : "/walk"
+  },
 
   // 커뮤니티 페이지
   COMMUNITY: {
@@ -30,5 +33,7 @@ export const PATHS = {
     LOGIN: "/user/login",
     SIGNUP: "/user/signup",
   },
+
+  
 
 };
