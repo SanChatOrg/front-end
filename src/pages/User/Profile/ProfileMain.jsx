@@ -8,7 +8,7 @@ import ProfileFollowList from './ProfileFollowList';
 import ProfilePetInfo from './ProfilePetInfo';
 import axios from "axios";
 import {useEffect, useState} from "react";
-import ProfileTabMenu from "../../../components/User/Profile/ProfileTabMenu.jsx";
+import ProfileTabMenu from './ProfileTabMenu';
 
 function ProfileMain() {
     const [userProfileData, setUserProfileData] = useState({});
