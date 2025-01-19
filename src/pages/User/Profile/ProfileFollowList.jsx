@@ -26,7 +26,7 @@ function ProfileFollowList({UnfollowUserBtnClick , isFollow ,setIsFollow ,follow
                          <div > ({follow.userId})</div>
                      </div>
                  </div>
-                 <div className='user-profile-following-btn' > <button> 팔로잉 </button>  </div>
+                 <div className='user-profile-following-btn' onClick={() => UnfollowUserBtnClick(follow.userNo)}> <button> 팔로잉 </button>  </div>
         
              </div>
                )
