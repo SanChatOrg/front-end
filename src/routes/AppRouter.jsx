@@ -1,8 +1,12 @@
 import {Routes, Route, Navigate} from 'react-router-dom';
 
 import {useContext, Suspense, lazy, useEffect} from 'react';
-import { PATHS } from './paths';
+import {PATHS} from './paths';
 import Layout from '../common/Layout';
+import ProtectedRoute from "./ProtectedRoute.jsx";
+
+// 로그인 화면
+const Login = lazy(() => import('../components/User/Login.jsx'));
 
 
 // 산책 화면
@@ -26,36 +30,41 @@ const CommunityDetail = lazy(() => import('../pages/Community/CommunityDetail.js
 
 
 function AppRouter() {
-  
-  return (
-    <Routes>
-      {/* 로그인 페이지 */}
-      <Route path={PATHS.LOGIN} element=""/>
 
-      {/* 레이아웃 설정 */}
-      <Route element={<Layout/>}>
-
+    return (
+        <Routes>
+            {/* 로그인 페이지 */}
+            <Route path={PATHS.LOGIN} element={<Login/>}/>
+            
         {/* 지도 페이지 */}
         <Route path={PATHS.MAP.MAP} element={<Map/>}/>
         <Route path={PATHS.MAP.WALK} element={<Walk/>}/>
 
-        {/* 커뮤니티 페이지 */}
-        <Route path={PATHS.COMMUNITY.MAIN} element={<CommunityMain/>}/>
-        <Route path={PATHS.COMMUNITY.DETAIL} element={<CommunityDetail/>}/>
-        <Route path={PATHS.COMMUNITY.WRITE} element={<CommunityWrite/>}/>
-        <Route path={PATHS.COMMUNITY.EDIT} element={<CommunityEdit/>}/>
 
-        {/* 채팅 페이지 */}
-        <Route path={PATHS.CHAT.LIST} element={<ChatListPage/>}/>
-        <Route path={`${PATHS.CHAT.ROOM}/:chatRoomNo?`} element={<ChatRoomPage/>}/>
+            <Route element={<ProtectedRoute/>}>
+                {/* 레이아웃 설정 */}
+                <Route element={<Layout/>}>
 
-        {/* 내정보 페이지 */}
-        <Route path={PATHS.USER.PROFILE} element={<Profile/>}/>
+                    {/* 지도 페이지 */}
+                    <Route path={PATHS.MAP} element={<Map/>}/>
 
-      </Route>
-      
-    </Routes>
-  );
+                    {/* 커뮤니티 페이지 */}
+                    <Route path={PATHS.COMMUNITY.MAIN} element={<CommunityMain/>}/>
+                    <Route path={PATHS.COMMUNITY.DETAIL} element={<CommunityDetail/>}/>
+                    <Route path={PATHS.COMMUNITY.WRITE} element={<CommunityWrite/>}/>
+                    <Route path={PATHS.COMMUNITY.EDIT} element={<CommunityEdit/>}/>
+
+                    {/* 채팅 페이지 */}
+                    <Route path={PATHS.CHAT.LIST} element={<ChatListPage/>}/>
+                    <Route path={`${PATHS.CHAT.ROOM}/:chatRoomNo?`} element={<ChatRoomPage/>}/>
+
+                    {/* 내정보 페이지 */}
+                    <Route path={PATHS.USER.PROFILE} element={<Profile/>}/>
+
+                </Route>
+            </Route>
+        </Routes>
+    );
 }
 
 export default AppRouter;

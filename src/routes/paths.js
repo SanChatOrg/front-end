@@ -2,6 +2,8 @@
 // 경로 변경시 paths.js 파일 수정
 
 export const PATHS = {
+  // login page
+  LOGIN: "/login",
 
   // 지도 페이지
   MAP: {

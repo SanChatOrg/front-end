@@ -8,15 +8,18 @@ import ProfileFollowList from './ProfileFollowList';
 import ProfilePetInfo from './ProfilePetInfo';
 import axios from "axios";
 import {useEffect, useState} from "react";
+import ProfileTabMenu from "../../../components/User/Profile/ProfileTabMenu.jsx";
 
 function ProfileMain() {
     const [userProfileData, setUserProfileData] = useState({});
     const [selectedPet, setSelectedPet] = useState(111); // 선택된 pet
-    const [imageList, setImageList] = useState([]); // pet list
+    const [imageList, setImageList] = useState([]); // pet Image list
+    const [badgeList, setBadgeList] = useState([]);
     const [dogList, setDogList] = useState([]);
     const [followList, setfollowList] = useState([]);
     const [followerList, setfollowerList] = useState([]);
     
+
     // 클릭한 userId 값 받아오기
     const {state} = useLocation();
     console.log(state);
@@ -55,6 +58,10 @@ function ProfileMain() {
 
 
     useEffect(() => {
+        if (dogList.length === 1) setSelectedPet(dogList[0].dogNo);
+    }, [dogList]);
+
+    useEffect(() => {
         setData();
       
     }, []);
@@ -64,11 +71,19 @@ function ProfileMain() {
         setSelectedPet(pet === selectedPet ? '' : pet);
     };
 
+    const handleTabSelection = (tab) => {
+        setIsPhoto(tab);
+    }
+
+    const checkIsMyPet = () => {
+        return selectedPet !== '' && dogList.map(dog => dog.dogNo).indexOf(selectedPet) >= 0;
+    }
+
     // pet image list 조회 함수
     const getImageList = async () => {
         let {data} = await axios.get('http://localhost:8181/photo/getImageList?type='
             + (
-                selectedPet !== '' && dogList.map(dog => dog.dogNo).indexOf(selectedPet) >= 0
+                checkIsMyPet()
                     ? 'dog&id=' + selectedPet : 'user&id=' + userProfileData.userNo));
         setImageList(data);
      
@@ -79,10 +94,22 @@ function ProfileMain() {
         console.log(JSON.stringify(data)+ "눌렸을때 넘어갈 값" , selectedDog);
     }
 
+
+
+    const getBadgeList = async () => {
+        let {data} = await axios.get('http://localhost:8181/badge/getBadgeList?type='
+            + (
+                checkIsMyPet()
+                    ? 'dog&id=' + selectedPet : 'user&id=' + userProfileData.userNo));
+        setBadgeList(data);
+        console.log(data);
+    }
+
     useEffect(() => {
         console.log("selectedPet" , selectedPet);
         if (userProfileData.userNo === undefined) return;
         getImageList();
+        // getBadgeList();
     }, [userProfileData, selectedPet]);
 
 
