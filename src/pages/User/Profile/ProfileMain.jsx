@@ -36,7 +36,7 @@ function ProfileMain() {
         }
     };
 
-    const setFollowList = async () => {
+    const getFollowList = async () => {
         try {
             let {data} = await axios.get('http://localhost:8181/follow/getFollowList?userNo=' + 1);
             console.log("팔로우리스트" , data);
@@ -46,7 +46,7 @@ function ProfileMain() {
         }
     };
 
-    const setFollowerList = async () => {
+    const getFollowerList = async () => {
         try {
             let {data} = await axios.get('http://localhost:8181/follow/getFollowerList?userNo=' + 1);
             console.log("팔로워리스트" , data);
@@ -57,13 +57,73 @@ function ProfileMain() {
     };
 
 
+    const [followUserNo, setFollowUserNo] = useState(0);
+
+    const followUserBtnClick = (userNo) => {
+        goFollowUser(userNo);
+    }
+
+    const UnfollowUserBtnClick = (userNo) => {
+        goUnFollowUser(userNo);
+    }
+
+    useEffect(()=> {
+        console.log("------------- 음하하핰 dㅋㅋ");
+        console.log("팔로우한 user " + followUserNo);
+    },[followUserNo])
+
+
+
+    const goFollowUser = async (userNo) => {
+        console.log(userNo)
+
+        try {
+            const payload = {
+                followerNo: 1, // 팔로워 ID
+                followeeNo: userNo, // 팔로우할 유저 ID
+            };
+    
+            let {data} = await axios.post('http://localhost:8181/follow/followUser',payload);
+            console.log("팔로우 완료");
+            getFollowList();
+            getFollowerList();
+            
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    };
+
+
+    const goUnFollowUser = async (userNo) => {
+        console.log(userNo)
+
+        try {
+            const payload = {
+                followerNo: 1, // 팔로워 ID
+                followeeNo: userNo, // 언팔로우할 유저 ID
+            };
+    
+            let {data} = await axios.post('http://localhost:8181/follow/unfollowUser',payload);
+            console.log("언팔로우 완료");
+            getFollowList();
+            getFollowerList();
+            
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    };
+
+
+
+
     useEffect(() => {
         if (dogList.length === 1) setSelectedPet(dogList[0].dogNo);
     }, [dogList]);
 
     useEffect(() => {
         setData();
-      
+        getFollowList();
+        getFollowerList();
     }, []);
 
     // pet 선택 함수
@@ -136,12 +196,12 @@ function ProfileMain() {
     const [isFollowList, setIsFollowList] = useState(false);
   
     const followBtnClick = () => {
-        setFollowList();
+        
         setIsFollow(true);
         setIsFollowList(true);
     }
     const followerBtnClick = () => {
-        setFollowerList();
+     
         setIsFollow(false);
         setIsFollowList(true);
     }
@@ -175,13 +235,15 @@ function ProfileMain() {
                 setIsFollow = {setIsFollow}
                 followBtnClick = {followBtnClick}
                 followerBtnClick = {followerBtnClick}
+                followList = {followList}
+                followerList = {followerList}
+                
           />
 
 
             {isFollowList ? 
             <> 
   
-
             <ProfileFollowList
                 isFollowList = {isFollowList}
                 isFollow = {isFollow}
@@ -190,6 +252,8 @@ function ProfileMain() {
                 followerBtnClick = {followerBtnClick}
                 followList = {followList}
                 followerList = {followerList}
+                followUserBtnClick = {followUserBtnClick}
+                UnfollowUserBtnClick = {UnfollowUserBtnClick}
             /> 
             </>
            
