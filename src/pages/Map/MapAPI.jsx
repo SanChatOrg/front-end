@@ -468,7 +468,7 @@ function MapAPI() {
             className='naver-map'
         ></div>
 
-        <MapWalkDisplay/>
+        {/* <MapWalkDisplay/> */}
       </div>
     </>
   );
