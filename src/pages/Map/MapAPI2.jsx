@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ReactDOMServer from 'react-dom/server';
 
 import './MapAPI.css';
-import ProfileModal from '../../components/User/Profile/ProfileModal';
+import ProfileModal from '../User/Profile/ProfileModal';
 import MapWalkDisplay from './MapWalkDisplay';
 
 

@@ -6,7 +6,7 @@ import Layout from '../common/Layout';
 import ProtectedRoute from "./ProtectedRoute.jsx";
 
 // 로그인 화면
-const Login = lazy(() => import('../components/User/Login.jsx'));
+const Login = lazy(() => import('../pages/User/Login/Login.jsx'));
 
 // 지도 화면
 const Map = lazy(() => import('../pages/Map/Map.jsx'));
@@ -33,14 +33,14 @@ function AppRouter() {
             <Route path={PATHS.LOGIN} element={<Login/>}/>
 
             {/* 기본 경로에서 메인 대시보드 화면으로 리다이렉트 */}
-            <Route path="/" element={<Navigate to={PATHS.MAP}/>}/>
+            <Route path="/" element={<Navigate to={PATHS.MAP.MAP}/>}/>
 
             <Route element={<ProtectedRoute/>}>
                 {/* 레이아웃 설정 */}
                 <Route element={<Layout/>}>
 
                     {/* 지도 페이지 */}
-                    <Route path={PATHS.MAP} element={<Map/>}/>
+                    <Route path={PATHS.MAP.MAP} element={<Map/>}/>
 
                     {/* 커뮤니티 페이지 */}
                     <Route path={PATHS.COMMUNITY.MAIN} element={<CommunityMain/>}/>

@@ -14,7 +14,7 @@ const Footer = () => {
 
   return (
     <div className="footer">
-      <div className="footer-item" onClick={() => handleNavigation(PATHS.MAP)}>
+      <div className="footer-item" onClick={() => handleNavigation(PATHS.MAP.MAP)}>
         <div className="icon map-icon" />
         <span>지도</span>
       </div>

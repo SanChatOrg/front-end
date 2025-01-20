@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ReactDOMServer from 'react-dom/server';
 import './MapWalkDisplay2.css'
 import './MapAPI.css';
-import ProfileModal from '../../components/User/Profile/ProfileModal';
+// import 
 import MapWalkDisplay from './MapWalkDisplay';
 import MapWalkDisplay2 from './MapWalkDisplay2';
 import MapWalkDisplay3 from './MapWalkDisplay3';
@@ -243,14 +243,14 @@ const createMarker = (naver, map, UserProfileData) => {
 const createInfoWindow = (naver, marker, UserProfileData, goUserProflie) => {
 
   const contentString = ReactDOMServer.renderToString(
-    <ProfileModal
-      image={UserProfileData.image}
-      name={UserProfileData.name}
-      info={UserProfileData.info}
-      dogList={UserProfileData.dogList}
-      walkStatus={UserProfileData.walkStatus}
-      goToProfile={goUserProflie}
-    />
+    // <ProfileModal
+    //   image={UserProfileData.image}
+    //   name={UserProfileData.name}
+    //   info={UserProfileData.info}
+    //   dogList={UserProfileData.dogList}
+    //   walkStatus={UserProfileData.walkStatus}
+    //   goToProfile={goUserProflie}
+    // />
   );
 
   const infowindow = new naver.maps.InfoWindow({
@@ -528,24 +528,28 @@ const result = () => {
 
     // 내 위치로 가기
   
-    const goMyLocation = (e) => {
-    e.preventDefault();
+  //   const goMyLocation = (e) => {
+  //   e.preventDefault();
 
-    if (mapRef.current) {
-      const jeju = new naver.maps.LatLng(location.latitude, location.longitude);
-      mapRef.current.setCenter(jeju);
-    } else {
-      console.error("Map instance is not initialized.");
-    }
-  };
-  
+  //   if (mapRef.current) {
+  //     const jeju = new naver.maps.LatLng(location.latitude, location.longitude);
+  //     mapRef.current.setCenter(jeju);
+  //   } else {
+  //     console.error("Map instance is not initialized.");
+  //   }
+  // };
+
+
+  const goMyWaklPage = () => {
+    navigate(`${PATHS.MAP.WALK}`);
+  }
 
   return (
     <>
 
 
 
-     { isWalkStart ? 
+     {/* { isWalkStart ? 
       <MapWalkDisplay3 
       isWalking={isWalking}
       isPaused={isPaused}
@@ -570,12 +574,12 @@ const result = () => {
         distance = {distance}
         elapsedTime = {elapsedTime}
         formatTime = {formatTime}
-        />
+        /> */}
 
 
         {/* 내 위치 바로가기 */}
         {/* <div className='map-my-location'> 
-            <button onClick={goMyLocation}> 📍 </button>
+            <button onClick={goMyWaklPage}> (임시) 산책 기록 </button>
         </div> */}
         
           {/* 지도 영역 */}

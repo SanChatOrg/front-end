@@ -1,0 +1,85 @@
+
+.profile-main-follow {
+    display: flex;
+    justify-content: space-around;
+    background-color: #ECECEC;
+    padding : 5px ;
+}
+.profile-main-follow > div {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.profile-main-follow > div:hover {
+    background-color: aquamarine;
+    cursor: pointer;
+}
+
+.follow-list {
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    height: 100%;
+}
+
+.follow-list-follow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.follow-list-follower {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+
+.follow-list-img{
+    margin: 10px;
+    border: 2px solid var(--main-color);
+    border-radius: 100%;
+    width: 70px;
+    height: 70px;
+}
+
+.follow-list-img > img{    
+    border-radius: 100%;
+    width: 70px;
+    height: 70px;
+    
+  }
+
+  .follow-list-follow-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+    
+  .user-profile-follow-btn > button {
+    font-size: 15px;
+    width: 100px;
+    padding: 3px 5px;
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
+    background-color: var(--sub-color);
+    border-radius: 15px;
+    font-weight: bold;
+  }
+
+ 
+
+  .user-profile-following-btn > button {
+    font-size: 15px;
+    width: 100px;
+    padding: 3px 5px;
+    border: 1px solid #929292;
+    color: #666666;
+    background-color: #EEEEEE;
+    border-radius: 15px;
+    font-weight: bold;
+  }

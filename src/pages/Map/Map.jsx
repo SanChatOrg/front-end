@@ -1,9 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './Map.css';
 import MapAPI from './MapAPI';
-import MapAPI2 from './MapAPI2';
-import MapAPI3 from './MapAPI3';
-import MapWalkDisplay from './MapWalkDisplay';
 
 
 
@@ -48,7 +45,7 @@ function Map() {
 
  
       {/* 지도 영역 컴포넌트 */}
-      <MapAPI3/>
+      <MapAPI/>
       
       {/* <ProfileModal      
           image={UserProfileData.image} 
