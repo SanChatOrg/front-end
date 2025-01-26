@@ -1,6 +1,71 @@
-
 .detail-text {
   border-bottom: 1px solid #e3e3e3;
   padding: 1px;
-  
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* 요소를 양 끝으로 배치 */
+  position: relative;
+  /* OptionBtn의 위치 조정을 위한 기준 */
+  padding: 10px;
+  /* 적당한 여백 추가 */
+}
+
+.detail-header-content {
+  display: flex;
+  flex-direction: column;
+  /* 세로로 배치 */
+  align-items: flex-start;
+  /* 왼쪽 정렬 */
+}
+
+.post-time {
+  margin-left: 45px;
+}
+
+.detail-reply {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* 요소를 양 끝으로 배치 */
+  position: relative;
+  /* OptionBtn의 위치 조정을 위한 기준 */
+  padding: 10px;
+  /* 적당한 여백 추가 */
+}
+
+.detail-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: fixed;
+  /* 화면 하단에 고정 */
+  bottom: 65px;
+  /* 하단에서 약간 위로 위치 */
+  left: 50%;
+  /* 화면의 가로 중앙으로 이동 */
+  transform: translateX(-50%);
+  /* 중앙 정렬 */
+  padding: 10px;
+  /* 내부 여백 */
+  background-color: white;
+  /* 배경색 */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  /* 위쪽 그림자 */
+  border-radius: 8px;
+  /* 둥근 모서리 */
+  z-index: 10;
+  /* 다른 요소보다 위에 배치 */
+  height: 35px;
+  width: 32%;
+}
+
+
+.reply-time {
+  margin-left: 46px;
+  margin-top: -10px;
 }

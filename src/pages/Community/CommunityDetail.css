@@ -1,0 +1,11 @@
+/* src/pages/Community/CommunityMain.css */
+
+.detail-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.detail-container:last-child {
+  margin-bottom: 100px;
+}

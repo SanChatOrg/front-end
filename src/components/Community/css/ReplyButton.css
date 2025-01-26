@@ -1,0 +1,15 @@
+.chat-btn {
+  border: none;
+  appearance: none;
+  height: 38px;
+  width: 38px;
+  background-color: transparent;
+}
+
+.chat-btn:hover {
+  cursor: pointer;
+}
+
+.chat-btn > img {
+  width: 100%;
+}

@@ -13,6 +13,7 @@ import "swiper/css/pagination";
 
 function CommunityEdit() {
 
+  const navigate = useNavigate();
   const [post, setPost] = useState({}); // 선택된 글
   const communityContent = post.communityContent; // 선택 글 본문
   const filePath = post.filePath; // 선택 글 사진
@@ -132,6 +133,8 @@ function CommunityEdit() {
         setPhotoIdsToDelete([]);
         setNewImage([]);
         setImagePreview([]);
+
+        navigate(`/community/detail`);
       })
       .catch(error => {
         console.error('업데이트 실패: ', error);

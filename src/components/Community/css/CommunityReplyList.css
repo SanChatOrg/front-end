@@ -1,1 +1,7 @@
 /* 댓글 묶음(목록) */
+
+.detail-reply-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}

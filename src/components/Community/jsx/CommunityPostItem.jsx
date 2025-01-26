@@ -15,7 +15,10 @@ function CommunityPostItem({ profileImg, userName, text, postImg, postTime }) {
     <div>
 
       <div className="post-header">
-        <CommunityProfile profileImg={profileImg} userName={userName} />
+        <div className="profile-time">
+          <CommunityProfile profileImg={profileImg} userName={userName} />
+          <CommunityPostTime postTime={postTime} />
+        </div>
         <CommunityOptionBtn />
       </div>
 
@@ -27,7 +30,6 @@ function CommunityPostItem({ profileImg, userName, text, postImg, postTime }) {
 
       <CommunityPostText userName={userName} text={text} />
 
-      <CommunityPostTime postTime={postTime} />
     </div>
   );
 }

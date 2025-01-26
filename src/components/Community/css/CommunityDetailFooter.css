@@ -1,0 +1,26 @@
+.chat-room-footer-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.chat-room-footer-send-btn {
+  width: 54px;
+  height: auto;
+}
+
+.chat-room-footer-input {
+  height: auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  width: 100%;
+}
+
+.chat-room-footer-input::placeholder {
+  font-size: 12px;
+}
+
