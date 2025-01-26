@@ -6,6 +6,7 @@
   }
   
   .profile-part-right {
+
   }
   
   .profile-part-left {
@@ -18,8 +19,12 @@
   }
   .profile-part-left-bottom {
     height: 20%;
+    display: flex;
     float: right;
+    justify-content: space-between;
+    align-items: center;
   }
+
   .user-profile-img{    
     margin: 10px;
     border: 3px solid var(--main-color);
@@ -60,5 +65,15 @@
     border-radius: 5px;
     font-weight: bold;
   }
-  
-  
+ 
+
+  .user-profile-myProfile > button {
+    font-size: 15px;
+    width: 100px;
+    padding: 3px 5px;
+    border: 1px solid #929292;
+    color: #666666;
+    background-color: #EEEEEE;
+    border-radius: 15px;
+    font-weight: bold;
+  }

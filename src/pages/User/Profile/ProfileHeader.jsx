@@ -1,8 +1,11 @@
 import './ProfileHeader.css';
+import {useParams} from 'react-router-dom';
+import ProfileFollow from './ProfileFollow';
+function ProfileHeader({userName , userInfo , userImage, userId, session }) {
 
-function ProfileHeader({userName , userInfo , userImage}) {
+  console.log(session);
 
-  console.log(userImage);
+  const { username } = useParams();
 
   return (
     
@@ -14,15 +17,28 @@ function ProfileHeader({userName , userInfo , userImage}) {
         </div>
         <div className='profile-part-left'>
           <div className='profile-part-left-top'>
-            <div className='user-profile-name'> {userName} </div>
+            <div className='user-profile-name'> {userName} ({userId}) </div>
             <div className='user-profile-intro'> {userInfo} </div>
+         
+          
           </div>
+        
           <div className='profile-part-left-bottom'>
             {/* 따로 처리 필요 세션에 따라 변경! */}
-          <div className='user-profile-follow'> <button> 팔로우 하기 </button>  </div>
+        
+            { session === username  ?
+             <div className='user-profile-myProfile'> <button> 내 프로필 </button>  </div>
+                
+                :
+                <div className='user-profile-follow'> <button> 팔로우 하기 </button>  </div>
+            }
+        
+      
           {/*<div className='user-profile-follow'> <button> 팔로잉 </button>  </div>
           <div className='user-profile-follow'> <button> 프로필 편집 </button>  </div>*/}
           </div>
+
+        
         </div>
 
       </div>

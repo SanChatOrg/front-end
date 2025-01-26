@@ -8,6 +8,9 @@
     margin-bottom: 10px;
   }
   
+  .pet-title  {
+    margin-bottom: 10px;
+  }
   .pet-title > span {  
     color: var(--main-color);
     font-weight: bold;
@@ -65,4 +68,10 @@
     height: 100%;
     object-fit: contain;
     border-radius: 100%;
+  }
+
+  .selected {
+    background-color: var(--sub-color);
+    border-top-left-radius: 30%;
+    border-top-right-radius: 30%;
   }

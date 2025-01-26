@@ -15,13 +15,14 @@ function ProfileFollow({isFollow ,isFollowList ,setIsFollow ,followerBtnClick , 
                     : 
                     <></>
                     }
-                <div className='profile-main-follow-left' onClick={followBtnClick}>
-                    <div className="follow-btn" > 팔로우 </div>
-                    <div  className="follow-amount"> {followList.length} </div>
-                </div>
+             
                 <div  className='profile-main-follow-right'  onClick={followerBtnClick} >
                     <div className="follower-btn"> 팔로워 </div>
                     <div className="follower-amount"> {followerList.length} </div>
+                </div>
+                <div className='profile-main-follow-left' onClick={followBtnClick}>
+                    <div className="follow-btn" > 팔로잉 </div>
+                    <div  className="follow-amount"> {followList.length} </div>
                 </div>
         </div>
 

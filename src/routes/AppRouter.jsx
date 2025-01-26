@@ -53,7 +53,7 @@ function AppRouter() {
                     <Route path={`${PATHS.CHAT.ROOM}/:chatRoomNo?`} element={<ChatRoomPage/>}/>
 
                     {/* 내정보 페이지 */}
-                    <Route path={PATHS.USER.PROFILE} element={<Profile/>}/>
+                    <Route path={`${PATHS.USER.PROFILE}/:username`} element={<Profile/>}/>
 
                 </Route>
             </Route>
