@@ -1,0 +1,23 @@
+.chat-body {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.list-item {
+    padding: 10px;
+    border-radius: 8px;
+    max-width: 70%;
+}
+
+.my-message {
+    align-self: flex-end;
+    background-color: #F6C2AB; /* 연한 녹색 (내 메시지) */
+    text-align: right;
+}
+
+.other-message {
+    align-self: flex-start;
+    background-color: #f1f0f0; /* 연한 회색 (상대방 메시지) */
+    text-align: left;
+}

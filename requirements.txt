@@ -1,4 +1,5 @@
 npm install react-router-dom
 npm install axios
 npm install ws
+npm install stomp
 # npm install @react-google-maps/api

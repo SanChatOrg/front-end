@@ -39,7 +39,7 @@ function CommunityWrite() {
     const selectedFiles = Array.from(e.target.files);
 
     setFiles(prevFiles => {
-      const plusFiles = [...prevFiles, ...selectedFiles];
+      let plusFiles = [...prevFiles, ...selectedFiles];
 
       if (selectedFiles.length > 10) {
         alert("최대 10개까지만 선택 가능합니다.");
