@@ -1,7 +1,7 @@
 // 게시물 작성 시간
 import "../css/CommunityPostTime.css";
 
-function CommunityPostTime({postTime}) {
+function CommunityPostTime({ postTime }) {
   return (
     <div>
 

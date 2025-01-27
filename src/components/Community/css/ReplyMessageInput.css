@@ -1,0 +1,9 @@
+.chat-send-input {
+  border-radius: var(--chat-radius-default);
+  border: none;
+  outline: none;
+  background-color: var(--chat-input-color-send);
+  font-size: 16px;
+  line-height: 40px;
+  padding-left: 10px;
+}
