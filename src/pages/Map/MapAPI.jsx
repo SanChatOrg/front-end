@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { PATHS } from '../../routes/paths';
 import { useNavigate } from 'react-router-dom';
 import ReactDOMServer from 'react-dom/server';
-
+import axios from "axios";
 import './MapAPI.css';
 import ProfileModal from '../User/Profile/ProfileModal';
 import MapWalkDisplay from './MapWalkDisplay';
@@ -11,10 +11,11 @@ import MapWalkDisplay from './MapWalkDisplay';
 
 function MapAPI() {
     const [location, setLocation] = useState({ latitude: null, longitude: null });
-    const [name, setName] = useState("");
+    const [name, setName] = useState("brown1234");
     const [chatt, setChatt] = useState([]);
     const [chkLog, setChkLog] = useState(false);
     const [socketData, setSocketData] = useState();
+    const [profile, setProfile] = useState({});
     const ws = useRef(null);    //webSocket을 담는 변수, 
                                 //컴포넌트가 변경될 때 객체가 유지되어야하므로 'ref'로 저장
     //webSocket
@@ -34,10 +35,14 @@ function MapAPI() {
 
     // 내 위치 가져오기 (2)
     useEffect(() => {
+  
+      setData();
+
       const watchId = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           setLocation({ latitude, longitude });
+          send();
         },
         (error) => {
           console.error("위치 정보 가져오기 실패:", error);
@@ -58,27 +63,13 @@ function MapAPI() {
     //     </div>
     // ));
 
-    
-
     useEffect(() => {
-
         if(socketData !== undefined) {
             const tempData = chatt.concat(socketData);
             console.log(tempData);
             setChatt(tempData);
         }
     }, [socketData]);
-
-    
-    const webSocketLogin = useCallback(() => {
-        ws.current = new WebSocket("ws://localhost:8181/tracking");
-
-        ws.current.onmessage = (message) => {
-            const dataSet = JSON.parse(message.data);
-            setSocketData(dataSet);
-            console.log(dataSet, "data set");
-        }
-    });
 
 
     const end = useCallback(() => {
@@ -102,8 +93,6 @@ function MapAPI() {
 
 
     });
-
-
 
     const send = useCallback(() => {
         if(!chkLog) {
@@ -149,6 +138,17 @@ function MapAPI() {
             }
     });
 
+
+    const webSocketLogin = useCallback(() => {
+      ws.current = new WebSocket("ws://localhost:8181/tracking");
+
+      ws.current.onmessage = (message) => {
+          const dataSet = JSON.parse(message.data);
+          setSocketData(dataSet);
+          console.log(dataSet, "data set");
+      }
+    });
+
     //webSocket
     //webSocket
     //webSocket
@@ -156,57 +156,16 @@ function MapAPI() {
     //webSocket
     //webSocket
 
+    // 초기 위치 설정 (예시: 서울의 위도, 경도)
+    const [latitude, setLatitude] = useState(37.5665);  // 서울 위도
+    const [longitude, setLongitude] = useState(126.9780);  // 서울 경도
 
-    ///////////////////////////////////////////////////////
-
-
-      // 초기 위치 설정 (예시: 서울의 위도, 경도)
-      const [latitude, setLatitude] = useState(37.5665);  // 서울 위도
-      const [longitude, setLongitude] = useState(126.9780);  // 서울 경도
-    
-      const earthRadius = 6371000;  // 지구 반지름 (단위: 미터)
-      const distance = 100;  // 100미터씩 이동
-    
-      // 위도, 경도를 100미터씩 임의로 이동시키는 함수
-      const moveByDistance = (lat, lon, distance) => {
-        // 위도 1도는 약 111킬로미터(111,000미터)
-        const deltaLat = distance / earthRadius;
-    
-        // 경도는 위도에 따라 달라짐, 적도에서 1도는 111킬로미터
-        const deltaLon = distance / (earthRadius * Math.cos(lat * Math.PI / 180));
-    
-        // 새로운 위도, 경도 계산
-        const newLat = lat + deltaLat * (180 / Math.PI);  // 위도 변경
-        const newLon = lon + deltaLon * (180 / Math.PI);  // 경도 변경
-    
-        return { newLat, newLon };
-      };
-    
-      // 100미터씩 이동하며 위치 업데이트하는 함수
-      const changeLocation = () => {
-        const newLocation = moveByDistance(latitude, longitude, distance);
-        setLatitude(newLocation.newLat);
-        setLongitude(newLocation.newLon);
-      };
-    
-      // 5초마다 위치를 100미터씩 이동
-      useEffect(() => {
-        const interval = setInterval(() => {
-          changeLocation();
-        }, 5000); // 5초마다 이동
-        console.log(latitude, longitude);
-        // 컴포넌트가 언마운트 될 때 인터벌 정리
-        return () => clearInterval(interval);
-      }, [latitude, longitude]);
-    
-
- /////////////////////////////////////
 
     const navigate = useNavigate();
 
       // 프로필 가기 (네비게이트)
       const goUserProflie = (userId) => { 
-        navigate(`${PATHS.USER.PROFILE}`,{state : userId});
+        navigate(`${PATHS.USER.PROFILE}/${userId}`,{state : userId});
 
       };
 
@@ -216,9 +175,9 @@ function MapAPI() {
 
       // 마커용 데이터 
       // 마커에 찍는 이미지는 따로 원형으로 마커용 이미지를 생성해야할 것 같음.
-      const [myName , setMyName] = useState('hyeju');
+      const [myName , setMyName] = useState('brown1234');
       const [UserProfileData, setUserProfileData] = useState([{
-        image: 'src/assets/img/user/ex_user_profile_02.png',
+        image: '',
         name: '',
         info: '입력한 정보가 없습니다.',
         dogList: [""],
@@ -226,11 +185,30 @@ function MapAPI() {
         userId: '',
         position: new naver.maps.LatLng(latitude, longitude), // 초기 값
     }]);
+    
+        const setData = async () => {
+          try {
+              let {data} = await axios.get('http://localhost:8181/user/getUser?userId=' + name);
+              console.log(data);
+              setProfile(data);
+          } catch (error) {
+              console.error("Error fetching user data:", error);
+          }
+      };
 
       // 마커 데이터 관리 
       useEffect(() => {
-        // 새로운 프로필 데이터를 생성하기 위한 기본 데이터 복사
-        const updatedData = [...UserProfileData];
+
+          // 새로운 프로필 데이터를 기본값으로 설정
+          let updatedData = [{
+            image: '',
+            name: 'brwon1234',
+            info: '입력한 정보가 없습니다.',
+            dogList: [""],
+            walkStatus: true,
+            userId: 'brwon1234',
+            position: new naver.maps.LatLng(latitude, longitude)
+          }];
 
         // chatt 데이터를 순회하면서 UserProfileData를 업데이트
         chatt.forEach((chat) => {
@@ -260,33 +238,6 @@ function MapAPI() {
     }, [chatt]);
 
     console.log(UserProfileData , "user 프로필 ");
-
-    // 임시 데이터 
-    // const UserProfileData = 
-    //   [{  image : 'src/assets/img/user/ex_user_profile_03.png',
-    //   name : '마루콩콩콩',
-    //   info : ' 마루 멍챗 맞팔 해요 ~',
-    //   dogList : ["마루"],
-    //   walkStatus : true,
-    //   userId : 'maru123',
-    //   position : new naver.maps.LatLng(37.5799, 127.200564)},
-    //   {image : 'src/assets/img/user/ex_user_profile_04.png',
-    //   name : '브라운박사',
-    //   info : ' 7 강아지 키우고 있는 브라운 박사 ! 입니다.',
-    //   dogList : ["레오", "헥토파스칼", "감자"],
-    //   walkStatus : true,
-    //   userId : 'backbrown',
-    //   position : new naver.maps.LatLng(37.5762414, 127.199533)},
-    //   {image : 'src/assets/img/user/ex_user_profile_02.png',
-    //   name : '시파주인',
-    //   info : '입력한 정보가 없습니다.',
-    //   dogList : ["모모"],
-    //   walkStatus : true,
-    //   userId : 'sibamomo22',
-    //   position : new naver.maps.LatLng(location.latitude, location.longitude)}
-    //   ]
-    // ;
-
 
     // 지도 불러오기
    
