@@ -4,4 +4,5 @@
   display: flex; /* 가로 배치 */
   align-items: center; /* 수직 중앙 정렬 */
   gap: 16px; /* 컴포넌트 간 간격 */
+  margin-left: 17px;
 }

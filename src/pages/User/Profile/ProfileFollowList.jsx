@@ -1,7 +1,7 @@
 import './ProfileFollowList.css';
 
 
-function ProfileFollowList({UnfollowUserBtnClick , isFollow ,setIsFollow ,followerBtnClick , followBtnClick, isFollowList, followBackBtnClick, followList, followerList, followUserBtnClick, setFollowUserNo}) {
+function ProfileFollowList({goUserProflie , UnfollowUserBtnClick , isFollow ,setIsFollow ,followerBtnClick , followBtnClick, isFollowList, followBackBtnClick, followList, followerList, followUserBtnClick, setFollowUserNo}) {
 
     console.log(followList);
     console.log(followerList);
@@ -17,12 +17,13 @@ function ProfileFollowList({UnfollowUserBtnClick , isFollow ,setIsFollow ,follow
             <>
                {followList.map((follow,index) => (
                  <div className='follow-list-follower' key={follow.userNo}> 
-                 <div className='follow-list-follow-box'>
+                 <div className='follow-list-follow-box' onClick={() => goUserProflie(follow.userId)}>
                      <div className='follow-list-img'> 
                          <img src="/src/assets/profile-image-002.png"/>  
                      </div> 
                      <div>
-                         <div> {follow.userName} </div>
+                         {/* <div  onClick={() => goUserProflie(follow.userId)}> {follow.userName} </div> */}
+                         <div  > {follow.userName} </div>
                          <div > ({follow.userId})</div>
                      </div>
                  </div>
@@ -38,7 +39,7 @@ function ProfileFollowList({UnfollowUserBtnClick , isFollow ,setIsFollow ,follow
                 {followerList.map((follower, index) => (
 
                 <div className='follow-list-follower' key={follower.userNo}>  
-                    <div className='follow-list-follow-box'>
+                    <div className='follow-list-follow-box' onClick={() => goUserProflie(follower.userId)}>
                         <div className='follow-list-img'> 
                             <img src="/src/assets/profile-image-002.png"/>  
                         </div> 

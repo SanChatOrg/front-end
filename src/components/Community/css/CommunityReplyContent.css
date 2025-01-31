@@ -1,4 +1,14 @@
 /* 댓글의 텍스트 내용 컴포넌트 */
 .detail-reply-content {
-
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  font-size: 13px;
+  padding-left: 5px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all; 
+  white-space: normal;
+  max-width: 300px;
 }

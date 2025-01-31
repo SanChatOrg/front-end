@@ -9,14 +9,14 @@ import CommunityPostTime from "./CommunityPostTime";
 import CommunityProfile from "./CommunityProfile";
 import CommunityReplyList from "./CommunityReplyList";
 
-function CommunityDetailItem({ profileImg, userName, text, postImg, postTime, replyCnt, handleContent, handlePostBtn, replyData, handleOnClickDelete }) {
+function CommunityDetailItem({ profileImg, userName, text, postImg, postTime, replyCnt, handleContent, handlePostBtn, replyData, handleOnClickDelete, handleMentionUser, replyContent, handlePostDelete, communityNo }) {
   return (
     <div>
       <div className="detail-header">
         <div className="detail-header-content">
           <CommunityProfile profileImg={profileImg} userName={userName} />
         </div>
-        <CommunityOptionBtn />
+        <CommunityOptionBtn handlePostDelete={handlePostDelete} communityNo={communityNo} />
       </div>
 
 
@@ -27,13 +27,16 @@ function CommunityDetailItem({ profileImg, userName, text, postImg, postTime, re
         <CommunityPostTime postTime={postTime} />
       </div>
 
-      <CommunityDetailReplyCnt replyCnt={replyCnt} />
+      <div className="detail-count">
+        <CommunityDetailReplyCnt replyCnt={replyCnt} />
+      </div>
 
-
-      <CommunityReplyList profileImg={profileImg} userName={userName} replyData={replyData} handleOnClickDelete={handleOnClickDelete} />
+      <div className="detail-list">
+        <CommunityReplyList profileImg={profileImg} userName={userName} replyData={replyData} handleOnClickDelete={handleOnClickDelete} onMentionUser={handleMentionUser} />
+      </div>
 
       <div className="detail-input">
-        <CommunityDetailFooter userName={userName} handleContent={handleContent} handlePostBtn={handlePostBtn} />
+        <CommunityDetailFooter userName={userName} handleContent={handleContent} handlePostBtn={handlePostBtn} replyContent={replyContent} />
       </div>
 
 

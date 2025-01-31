@@ -1,7 +1,33 @@
 /* 댓글 묶음(목록) */
 
+.detail-reply {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    padding: 12px 0 0 0;
+    margin-left: 10px;
+}
+
 .detail-reply-left {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.profile-time-wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+.reply-content-wrapper {
+  /* margin-top: 4px; */
+}
+
+.username-time {
+  display: flex;
+  flex-direction: column; /* 위→아래로 쌓임 */
+  gap: 2px;  
 }

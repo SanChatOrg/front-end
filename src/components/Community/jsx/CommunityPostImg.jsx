@@ -4,7 +4,6 @@ import { Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination"; 
 import "../css/CommunityPostImg.css";
-// import postImg from "../../../../src/assets/img/user/ex_user_profile_01.png";
 
 
 function CommunityPostImg({ postImg }) {

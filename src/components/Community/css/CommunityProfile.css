@@ -2,9 +2,9 @@
 
 .user-profile {
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   gap: 10px;
-  margin-top: 7px;
+  margin-bottom: 7px;
   margin-left: 5px;
 }
 

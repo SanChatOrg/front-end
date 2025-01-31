@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './Map.css';
-import MapAPI from './MapAPI';
+import MapAPI5 from './MapAPI5';
 
 
 
@@ -45,7 +45,7 @@ function Map() {
 
  
       {/* 지도 영역 컴포넌트 */}
-      <MapAPI/>
+      <MapAPI5/>
       
       {/* <ProfileModal      
           image={UserProfileData.image} 

@@ -1,6 +1,6 @@
 import '../css/ReplyMessageInput.css';
 
-function ReplyMessageInput({ className, type, placeholder, handleContent }) {
+function ReplyMessageInput({ className, type, placeholder, value, handleContent }) {
 
   return (
     <>
@@ -8,6 +8,7 @@ function ReplyMessageInput({ className, type, placeholder, handleContent }) {
         className={`chat-send-input ${className}`}
         type={type}
         placeholder={placeholder}
+        value={value}
         onChange={handleContent}
       />
     </>

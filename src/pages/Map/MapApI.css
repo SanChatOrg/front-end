@@ -1,9 +1,9 @@
 
 .map-box {
     position: relative;
-    border: 1px solid red;
+    /* border: 1px solid red; */
     width: 500px;
-    height: 800px;
+    height: 100%;
 
 }
 
@@ -57,5 +57,35 @@
 
 
 .map-view-mode > button:active {
-    background-color: red;
+    background-color: #ddd;
+}
+
+.walk-box {
+    display: flex;
+    position: absolute;
+    top: 80%;
+    left: 30%;
+    z-index: 100;
+}
+
+.walk-box > input:nth-child(1) {
+    width: 100%;
+    padding: 10px;
+    border: 3px solid var(--main-color);
+    border-radius: 10px;
+    margin: 10px;
+    background-color: var(--sub-color);
+    color : var(--main-color);
+    font-weight: bold;
+}
+
+.walk-box > input:nth-child(2) {
+    width: 100%;
+    padding: 10px;
+    border: 3px solid var(--gray);
+    border-radius: 10px;
+    margin: 10px;
+    background-color: var(--chat-input-color-default);
+    font-weight: bold;
+    color :  #3f3f3f;
 }

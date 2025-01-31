@@ -1,5 +1,5 @@
-import './ProfileMain.css';
-import {useLocation} from 'react-router-dom';
+
+import {useLocation , useParams , useNavigate} from 'react-router-dom';
 import ProfileHeader from './ProfileHeader';
 import ProfileImageList from './ProfileImageList';
 import ProfilePetList from './ProfilePetList';
@@ -7,8 +7,9 @@ import ProfileFollow from './ProfileFollow';
 import ProfileFollowList from './ProfileFollowList';
 import ProfilePetInfo from './ProfilePetInfo';
 import axios from "axios";
-import {useEffect, useState} from "react";
+import {act, useEffect, useState} from "react";
 import ProfileTabMenu from './ProfileTabMenu';
+import { PATHS } from '../../../routes/paths';
 
 function ProfileMain() {
     const [userProfileData, setUserProfileData] = useState({});
@@ -18,16 +19,29 @@ function ProfileMain() {
     const [dogList, setDogList] = useState([]);
     const [followList, setfollowList] = useState([]);
     const [followerList, setfollowerList] = useState([]);
-    
+    const [session , setSession] = useState("brown1234");
 
     // 클릭한 userId 값 받아오기
     const {state} = useLocation();
     console.log(state);
 
+
+    const { username } = useParams();
+
+    useEffect(() => {
+        setData();
+        getFollowList();
+        getFollowerList();
+        setIsFollowList(false);
+        getDogList();
+        // getUserNoTest();
+    }, [username]);
+
+
     // 조회 하기
     const setData = async () => {
         try {
-            let {data} = await axios.get('http://localhost:8181/user/getUser?userNo=' + 1);
+            let {data} = await axios.get('http://localhost:8181/user/getUser?userId=' + username);
             console.log(data);
             setUserProfileData(data);
             setDogList(data.dogList);
@@ -38,7 +52,7 @@ function ProfileMain() {
 
     const getFollowList = async () => {
         try {
-            let {data} = await axios.get('http://localhost:8181/follow/getFollowList?userNo=' + 1);
+            let {data} = await axios.get('http://localhost:8181/follow/getFollowList?userId=' + username);
             console.log("팔로우리스트" , data);
             setfollowList(data);
         } catch (error) {
@@ -48,7 +62,7 @@ function ProfileMain() {
 
     const getFollowerList = async () => {
         try {
-            let {data} = await axios.get('http://localhost:8181/follow/getFollowerList?userNo=' + 1);
+            let {data} = await axios.get('http://localhost:8181/follow/getFollowerList?userId=' + username);
             console.log("팔로워리스트" , data);
             setfollowerList(data);
         } catch (error) {
@@ -56,6 +70,34 @@ function ProfileMain() {
         }
     };
 
+    const getUserNoTest = async () => {
+        try {
+            let {data} = await axios.get('http://localhost:8181/user/test?userId='+ username );
+            console.log("이거 userNo 테스트 " + data);
+        }catch(error) {
+
+        }
+    }
+
+    const getDogList = async () => {
+        try {
+            let {data} = await axios.get('http://localhost:8181/user/getDogList?userId='+ username );
+            setDogList(data);
+            console.log("강아지리스트-----------------" , data);
+        }catch(error) {
+
+        }
+    }
+
+
+    getDogList
+
+    const navigate = useNavigate();
+
+    // 프로필 가기 (네비게이트)
+    const goUserProflie = (userId) => { 
+      navigate(`${PATHS.USER.PROFILE}/${userId}`, {state : { userId } });
+    };
 
     const [followUserNo, setFollowUserNo] = useState(0);
 
@@ -120,11 +162,7 @@ function ProfileMain() {
         if (dogList.length === 1) setSelectedPet(dogList[0].dogNo);
     }, [dogList]);
 
-    useEffect(() => {
-        setData();
-        getFollowList();
-        getFollowerList();
-    }, []);
+
 
     // pet 선택 함수
     const handlePetSelection = (pet) => {
@@ -140,6 +178,7 @@ function ProfileMain() {
     }
 
     // pet image list 조회 함수
+    // 수정해야함
     const getImageList = async () => {
         let {data} = await axios.get('http://localhost:8181/photo/getImageList?type='
             + (
@@ -151,19 +190,19 @@ function ProfileMain() {
 
            
             setSelectedDogData(selectedDog || {});
+        
         console.log(JSON.stringify(data)+ "눌렸을때 넘어갈 값" , selectedDog);
     }
 
-
-
-    const getBadgeList = async () => {
-        let {data} = await axios.get('http://localhost:8181/badge/getBadgeList?type='
-            + (
-                checkIsMyPet()
-                    ? 'dog&id=' + selectedPet : 'user&id=' + userProfileData.userNo));
-        setBadgeList(data);
-        console.log(data);
-    }
+    // 뱃지 리스트
+    // const getBadgeList = async () => {
+    //     let {data} = await axios.get('http://localhost:8181/badge/getBadgeList?type='
+    //         + (
+    //             checkIsMyPet()
+    //                 ? 'dog&id=' + selectedPet : 'user&id=' + userProfileData.userNo));
+    //     setBadgeList(data);
+    //     console.log(data);
+    // }
 
     useEffect(() => {
         console.log("selectedPet" , selectedPet);
@@ -190,13 +229,12 @@ function ProfileMain() {
     }
 
 
-
+    
 
     const [isFollow, setIsFollow] = useState(false);
     const [isFollowList, setIsFollowList] = useState(false);
   
     const followBtnClick = () => {
-        
         setIsFollow(true);
         setIsFollowList(true);
     }
@@ -208,6 +246,7 @@ function ProfileMain() {
     const followBackBtnClick = () => {
         setIsFollowList(false);
         console.log("뒤로가자");
+        setSelectedPet('');
     }
 
     const [selectedDogData, setSelectedDogData] = useState({});
@@ -221,14 +260,16 @@ function ProfileMain() {
     return (
 
         <div>
+           
             <ProfileHeader
                 userId={userProfileData.userId || ''}
                 userName={userProfileData.userName || ''}
                 userInfo={userProfileData.userIntro || ''}
                 userImage={userProfileData.photo || '#'}
+                session = {session}
             />
 
-            <ProfileFollow 
+           <ProfileFollow 
                 isFollowList = {isFollowList}
                 followBackBtnClick = {followBackBtnClick}
                 isFollow = {isFollow}
@@ -237,9 +278,10 @@ function ProfileMain() {
                 followerBtnClick = {followerBtnClick}
                 followList = {followList}
                 followerList = {followerList}
+                username = {username}
                 
           />
-
+         
 
             {isFollowList ? 
             <> 
@@ -254,6 +296,7 @@ function ProfileMain() {
                 followerList = {followerList}
                 followUserBtnClick = {followUserBtnClick}
                 UnfollowUserBtnClick = {UnfollowUserBtnClick}
+                goUserProflie = {goUserProflie} 
             /> 
             </>
            
@@ -267,6 +310,8 @@ function ProfileMain() {
                 userName={userProfileData.userName || ''}
                 dogList={dogList || []}
                 onPetSelection={handlePetSelection}
+                selectedPet = {selectedPet}
+
 
             />
 
