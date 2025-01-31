@@ -1,23 +1,27 @@
 // 댓글버튼과 댓글 수 컴포넌트
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../css/CommunityReplyBtn.css"
 import { PATHS } from "../../../routes/paths";
+import replyBtn from "../../../assets/replyBtn.svg"
 
-function CommunityReplyBtn() {
+
+function CommunityReplyBtn({ replyCount, communityNo }) {
 
   const navigate = useNavigate();
 
   const handleOnClickDetail = () => {
     setTimeout(() => {
-      navigate(PATHS.COMMUNITY.DETAIL);
+      navigate(`${PATHS.COMMUNITY.DETAIL}/${communityNo}`);
     }, 200);
   }
 
   return (
     <div>
       <div className="reply-container">
-        <button onClick={handleOnClickDetail}></button>
-        <span className="reply-count">1,100</span>
+        <button onClick={handleOnClickDetail} className="reply-btn">
+          <img src={replyBtn} alt="댓글 버튼" className="reply-btn-img"/>
+        </button>
+        <span className="reply-count">{replyCount}</span>
       </div>
     </div>
   );

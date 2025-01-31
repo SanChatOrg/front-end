@@ -1,5 +1,5 @@
 /* src/pages/Community/CommunityEdit.jsx */
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./CommunityEdit.css";
 import { PATHS } from "../../routes/paths";
 import Header from "../../components/Community/jsx/Header";
@@ -23,7 +23,8 @@ function CommunityEdit() {
   const existingImages = (post.filePath && post.filePath.length > 0) ? post.filePath : [];  // 기존 사진 URL을 배열에 포함
   const allImages = [...existingImages, ...imagePreview];// 기존 이미지와 새 이미지 미리보기 합치기
   const fileInputRef = useRef(null); // 파일 추가 시 사용
-
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
+  const { communityNo } = useParams();
 
   // 서버연결 확인
   useEffect(() => {
@@ -37,7 +38,7 @@ function CommunityEdit() {
 
   // 글 조회
   useEffect(() => {
-    fetch(`http://localhost:8181/community/getPost/1`) // 추후 선택된 글 ${communityNo} 변경예정
+    fetch(`http://localhost:8181/community/getPost/${communityNo}`) // 추후 선택된 글 ${communityNo} 변경예정
       .then(response => {
         if (!response.ok) {
           throw new Error("글 조회 실패");
@@ -80,7 +81,7 @@ function CommunityEdit() {
       const updatedPhotoList = [...post.photoList];
 
       const photoIdToRemove = updatedPhotoList[index].photoNo; // 삭제할 사진 ID
-      setPhotoIdsToDelete((prevIds) => [...prevIds, photoIdToRemove]); 
+      setPhotoIdsToDelete((prevIds) => [...prevIds, photoIdToRemove]);
 
       updatedExisting.splice(index, 1);
       updatedPhotoList.splice(index, 1);
@@ -111,6 +112,8 @@ function CommunityEdit() {
       return;
     }
 
+    setIsLoading(true); // 로딩 시작
+
     // FormData
     const formData = new FormData();
     formData.append("communityContent", communityContent);
@@ -121,7 +124,7 @@ function CommunityEdit() {
       formData.append("photoIdsToDelete", photoId.toString());
     });
 
-    axios.put(`http://localhost:8181/community/editPost/1`, formData, { // 추후 선택된 글 ${communityNo} 변경예정
+    axios.put(`http://localhost:8181/community/editPost/${communityNo}`, formData, { // 추후 선택된 글 ${communityNo} 변경예정
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -134,12 +137,17 @@ function CommunityEdit() {
         setNewImage([]);
         setImagePreview([]);
 
-        navigate(`/community/detail`);
+        navigate(`${PATHS.COMMUNITY.DETAIL}/${communityNo}`);
+        alert("글이 수정되었습니다.")
+
       })
       .catch(error => {
         console.error('업데이트 실패: ', error);
         alert("업데이트에 실패했습니다. 다시 시도해주세요.");
       })
+      .finally(() => {
+        setIsLoading(false); // 로딩 종료
+      });
   };
 
   // 파일 기존에 추가 버튼
@@ -232,6 +240,13 @@ function CommunityEdit() {
         <button className="share-btn" onClick={handleUpdatePost}>공유</button>
       </div>
 
+      {/* 로딩 오버레이 */}
+      {isLoading && (
+        <div className="loading_overlay">
+          <div className="spinner"></div>
+          <div className="loading_text">로딩중..</div>
+        </div>
+      )}
     </div>
   );
 }

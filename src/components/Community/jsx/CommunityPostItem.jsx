@@ -9,7 +9,7 @@ import CommunityPostTime from "./CommunityPostTime";
 import CommunityProfile from "./CommunityProfile";
 import CommunityResponseItem from "./CommunityResponseItem";
 
-function CommunityPostItem({ profileImg, userName, text, postImg, postTime }) {
+function CommunityPostItem({ communityNo, profileImg, userName, text, postImg, postTime, likeCount, replyCount, onLike }) {
 
   return (
     <div>
@@ -19,14 +19,12 @@ function CommunityPostItem({ profileImg, userName, text, postImg, postTime }) {
           <CommunityProfile profileImg={profileImg} userName={userName} />
           <CommunityPostTime postTime={postTime} />
         </div>
-        <CommunityOptionBtn />
+        <CommunityOptionBtn communityNo={communityNo} />
       </div>
 
       <CommunityPostImg postImg={postImg} />
 
-      <CommunityImgScroll />
-
-      <CommunityResponseItem />
+      <CommunityResponseItem likeCount={likeCount} replyCount={replyCount} onLike={onLike} communityNo={communityNo} />
 
       <CommunityPostText userName={userName} text={text} />
 

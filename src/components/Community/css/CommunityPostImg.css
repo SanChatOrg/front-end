@@ -1,17 +1,23 @@
 /* 게시물 사진 컴포넌트 */
 .post-image-container {
-  width: 100%;
+  width: 466.99px;
+  height: 466.99px; 
   max-width: 467px;
   margin: 0 auto;
   overflow: hidden;
   margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .post-image {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: cover;
   display: block;
+  object-fit: cover;
+  object-position: center;
 }
 
 /* Swiper 슬라이드 컨테이너 */

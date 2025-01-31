@@ -4,12 +4,12 @@ import "../css/CommunityReplyItem.css";
 import CommunityLikeBtn from "./CommunityLikeBtn";
 import CommunityReplyBtn from "./CommunityReplyBtn";
 
-function CommunityResponseItem() {
+function CommunityResponseItem({ likeCount, replyCount, onLike, communityNo }) {
   return (
     <div className="btn-container">
-      <CommunityLikeBtn/>
+      <CommunityLikeBtn likeCount={likeCount} onLike={onLike} />
 
-      <CommunityReplyBtn/>
+      <CommunityReplyBtn replyCount={replyCount} communityNo={communityNo} />
     </div>
   );
 }

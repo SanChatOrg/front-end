@@ -6,9 +6,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import defaultProfileImg from "../../assets/dog-paw-active.png";
 import "./CommunityDetail.css"
+import { useNavigate, useParams } from "react-router-dom";
+import { PATHS } from '../../routes/paths';
+
 
 function CommunityDetail() {
 
+  const navigate = useNavigate();
   const [post, setPost] = useState({ // 조회한 디테일 데이터
     profileImg: "",
     userName: "",
@@ -21,12 +25,19 @@ function CommunityDetail() {
   });
   const [replyContent, setReplyContent] = useState(''); // 작성 댓글 내용
   const [getReplyData, setGetReplyData] = useState([]); // 조회한 댓글 리스트
+  const [isDeleting, setIsDeleting] = useState(false); // 삭제상태
+  const { communityNo } = useParams();
 
+
+  const nickName = post.userName;
+
+  // 시간 설정
   const calculateTime = (createdAt) => {
     const postedTime = new Date(createdAt);
     const currentTime = new Date();
     const diff = Math.floor((currentTime - postedTime) / 1000 / 60);
 
+    if (diff < 1) return "지금";
     if (diff < 60) return `${diff}분`;
     if (diff < 1440) return `${Math.floor(diff / 60)}시간`;
     return `${Math.floor(diff / 1440)}일`;
@@ -45,7 +56,7 @@ function CommunityDetail() {
 
   // 글 조회
   useEffect(() => {
-    fetch(`http://localhost:8181/community/getDetail/1`) // 추후 선택된 글 ${communityNo} 변경예정
+    fetch(`http://localhost:8181/community/getDetail/${communityNo}`) // 추후 선택된 글 ${communityNo} 변경예정
       .then(response => {
         if (!response.ok) {
           throw new Error("글 조회 실패");
@@ -113,7 +124,7 @@ function CommunityDetail() {
   }
 
   // 댓글 업로드 버튼
-  const handlePostBtn = () => {
+  const handlePostBtn = async () => {
     if (!replyContent.trim()) {
       alert("댓글이 입력되지 않았어요.");
       return;
@@ -124,17 +135,34 @@ function CommunityDetail() {
     formData.append("userNo", post.userNo);
     formData.append("communityNo", post.communityNo);
 
-    axios.post(`http://localhost:8181/community/newReply/1`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    })
-      .then(response => {
-        console.log('업로드 성공: ', response.data);
-      })
-      .catch(error => {
-        console.error('등록 실패: ', error);
+    try {
+      const response = await fetch(`http://localhost:8181/community/newReply/${communityNo}`, {
+        method: 'POST',
+        body: formData
       });
+
+      if (!response.ok) {
+        throw new Error("댓글 등록 실패");
+      }
+
+      const data = await response.json();
+
+      setGetReplyData(prevReplyData => [...prevReplyData, {
+        communityNo: data.communityNo,
+        createdAt: calculateTime(data.createdAt),
+        replyContent: data.replyContent,
+        replyNo: data.replyNo,
+        replyParentNo: data.replyParentNo || null,
+        updatedAt: calculateTime(data.updatedAt),
+        userNo: data.userNo,
+      }]);
+
+      setReplyContent('');
+
+    } catch (error) {
+      console.error('댓글 등록 실패: ', error);
+      alert('댓글 등록에 실패했습니다. 다시 시도해주세요.');
+    }
   };
 
   console.log(getReplyData.replyContent);
@@ -142,11 +170,42 @@ function CommunityDetail() {
   // 댓글 삭제
   const handleOnClickDelete = async (communityNo, replyNo) => {
     try {
-      await axios.put(`http://localhost:8181/community/deleteReply/${communityNo}/${replyNo}`); // 
+      await axios.put(`http://localhost:8181/community/deleteReply/${communityNo}/${replyNo}`);
+      setGetReplyData((prevReplyData) =>
+        prevReplyData.filter((reply) => reply.replyNo !== replyNo)
+      );
     } catch (error) {
-      console.error("댓글 삭제 실패: ", error);  
+      console.error("댓글 삭제 실패: ", error);
     }
     console.log("댓글 삭제 완료: " + replyNo);
+  };
+
+  // 답글 달기
+  const handleMentionUser = (nickName) => {
+    setReplyContent(`@${nickName} `);
+  };
+
+  // 본문 삭제
+  const handlePostDelete = async (communityNo) => {
+    if (!window.confirm('게시글을 삭제하시겠습니까?')) {
+      return;
+    }
+
+    try {
+      setIsDeleting(true);
+
+      await axios.put(`http://localhost:8181/community/deletePost/${communityNo}`);
+      alert('게시글이 삭제되었습니다.');
+      navigate(PATHS.COMMUNITY.MAIN);
+    } catch (error) {
+      console.error("게시글 삭제 실패: ", error);
+      alert('게시글 삭제에 실패했습니다. 다시 시도해주세요.');
+
+    } finally {
+      setIsDeleting(false);
+      setMenuOpen(false);
+    }
+    console.log("게시글 삭제 완료: " + communityNo);
   };
 
 
@@ -160,14 +219,22 @@ function CommunityDetail() {
           postTime={post.postTime}
           text={post.text}
           postImg={post.postImg}
-          replyCnt={post.replyCnt}
+          replyCnt={getReplyData.length}
+          communityNo={post.communityNo}
 
           // 댓글
+          replyContent={replyContent}
           handleContent={handleContent}
           handlePostBtn={handlePostBtn}
-          handleOnClickDelete={() => handleOnClickDelete(getReplyData.communityNo, getReplyData.replyNo)}
+          handleOnClickDelete={handleOnClickDelete}
 
           replyData={getReplyData}
+
+          // 답글달기
+          handleMentionUser={handleMentionUser}
+
+          // 본문삭제
+          handlePostDelete={handlePostDelete}
         />
       </div>
     </div>

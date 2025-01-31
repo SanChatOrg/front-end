@@ -272,3 +272,47 @@ div {
 .share-btn:hover {
   background-color: #A24D28;
 }
+
+.loading_overlay { 
+  position: absolute; /* fixed → absolute 변경 */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  width: 500px; /* 컨텐츠 너비 지정 */
+  margin: 0 auto; /* 가운데 정렬 */
+}
+
+.spinner { 
+  border: 12px solid #f3f3f3; 
+  border-top: 12px solid #A24D28; 
+  border-radius: 50%; 
+  width: 40px; 
+  height: 40px; 
+  animation: spin 1s linear infinite; 
+  margin-bottom: 20px; 
+} 
+
+.loading_text { 
+  color: #fff; 
+  font-size: 20px; 
+} 
+
+@keyframes spin { 
+  0% { transform: rotate(0deg); } 
+  100% { transform: rotate(360deg); } 
+}
+
+@media (max-width: 500px){
+  .spinner { 
+    width: 40px; 
+    height: 40px; 
+    border-width: 8px; 
+  } 
+}

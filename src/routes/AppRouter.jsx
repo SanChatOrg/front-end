@@ -44,9 +44,9 @@ function AppRouter() {
 
                     {/* 커뮤니티 페이지 */}
                     <Route path={PATHS.COMMUNITY.MAIN} element={<CommunityMain/>}/>
-                    <Route path={PATHS.COMMUNITY.DETAIL} element={<CommunityDetail/>}/>
+                    <Route path={`${PATHS.COMMUNITY.DETAIL}/:communityNo`} element={<CommunityDetail/>}/>
                     <Route path={PATHS.COMMUNITY.WRITE} element={<CommunityWrite/>}/>
-                    <Route path={PATHS.COMMUNITY.EDIT} element={<CommunityEdit/>}/>
+                    <Route path={`${PATHS.COMMUNITY.EDIT}/:communityNo`} element={<CommunityEdit/>}/>
 
                     {/* 채팅 페이지 */}
                     <Route path={PATHS.CHAT.LIST} element={<ChatListPage/>}/>

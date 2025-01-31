@@ -12,10 +12,12 @@ import "swiper/css/pagination";
 
 function CommunityWrite() {
 
+  const navigate = useNavigate();
   const [communityContent, setCommunityContent] = useState(''); // 글 본문
   const [files, setFiles] = useState([]); // 사진
   const [imagePreviews, setImagePreviews] = useState([]); // 사진 미리보기
   const fileInputRef = useRef(null); // 파일 추가 시 사용
+  const [isLoading, setIsLoading] = useState(false); // 로딩 상태 추가
 
 
   // 서버연결 확인
@@ -80,6 +82,8 @@ function CommunityWrite() {
       return;
     }
 
+    setIsLoading(true); // 로딩 시작
+
     // FormData 생성
     const formData = new FormData();
     formData.append("communityContent", communityContent);
@@ -94,9 +98,16 @@ function CommunityWrite() {
     })
       .then(response => {
         console.log('업로드 성공: ', response.data);
+
+        navigate(PATHS.COMMUNITY.MAIN);
+        alert("새 글이 등록되었습니다.")
+        
       })
       .catch(error => {
         console.error('등록 실패: ', error);
+      })
+      .finally(() => {
+        setIsLoading(false); // 로딩 종료
       });
   };
 
@@ -110,92 +121,102 @@ function CommunityWrite() {
   return (
     <div>
       <Header pageName="산책 글쓰기" />
+      <div>
+        <div className="mid">
+          <div className="upload-container">
 
-      <div className="mid">
-        <div className="upload-container">
-
-          {imagePreviews.length > 0 ? (
-            <>
-              {/* 파일이 있을 경우 */}
-              <Swiper
-                className="custom-swiper"
-                modules={[Pagination]}
-                pagination={{
-                  clickable: true,
-                  bulletClass: "default-pagination-color",
-                  bulletActiveClass: "active-pagination-color",
-                }}
-                slidesPerView={1}
-                loop={imagePreviews.length > 1}
-              >
-                {imagePreviews.map((preview, index) => (
-                  <SwiperSlide key={index}>
-                    <div className="image-container">
-                      <img
-                        src={preview}
-                        alt={`preview-${index}`}
-                        className="image-preview"
-                      />
-                      <button className="remove-btn" onClick={() => handleRemoveImage(index)}>
-                        ✖
-                      </button>
-
-                      {files.length < 10 && (
-                        <button className="add-btn" onClick={openFileDialog}>
-                          +
+            {imagePreviews.length > 0 ? (
+              <>
+                {/* 파일이 있을 경우 */}
+                <Swiper
+                  className="custom-swiper"
+                  modules={[Pagination]}
+                  pagination={{
+                    clickable: true,
+                    bulletClass: "default-pagination-color",
+                    bulletActiveClass: "active-pagination-color",
+                  }}
+                  slidesPerView={1}
+                  loop={imagePreviews.length > 1}
+                >
+                  {imagePreviews.map((preview, index) => (
+                    <SwiperSlide key={index}>
+                      <div className="image-container">
+                        <img
+                          src={preview}
+                          alt={`preview-${index}`}
+                          className="image-preview"
+                        />
+                        <button className="remove-btn" onClick={() => handleRemoveImage(index)}>
+                          ✖
                         </button>
-                      )}
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
 
-              <input
-                type="file"
-                accept="image/*"
-                className="file-input"
-                multiple
-                onChange={handleImage}
-                ref={fileInputRef}
-              />
-            </>
-          ) : (
-            <>
-              {/* 사진이 없을 경우 */}
-              <button className="img-btn">
-                <img
-                  src="/icons/ic_commu_addPhoto_btn.svg"
-                  className="photo-icon"
-                  alt="사진 추가"
-                />
+                        {files.length < 10 && (
+                          <button className="add-btn" onClick={openFileDialog}>
+                            +
+                          </button>
+                        )}
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+
                 <input
                   type="file"
                   accept="image/*"
                   className="file-input"
                   multiple
                   onChange={handleImage}
+                  ref={fileInputRef}
                 />
-              </button>
-              <div className="image-text">사진 등록</div>
-            </>
-          )}
+              </>
+            ) : (
+              <>
+                {/* 사진이 없을 경우 */}
+                <button className="img-btn">
+                  <img
+                    src="/icons/ic_commu_addPhoto_btn.svg"
+                    className="photo-icon"
+                    alt="사진 추가"
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="file-input"
+                    multiple
+                    onChange={handleImage}
+                  />
+                </button>
+                <div className="image-text">사진 등록</div>
+              </>
+            )}
+
+          </div>
+
+          <div className="content-container">
+            <textarea
+              type="text"
+              placeholder="내용을 입력해주세요"
+              onChange={handleContent}
+            ></textarea>
+          </div>
 
         </div>
 
-        <div className="content-container">
-          <textarea
-            type="text"
-            placeholder="내용을 입력해주세요"
-            onChange={handleContent}
-          ></textarea>
+        <div className="bottom">
+          <button className="share-btn" onClick={handlePost}>
+            공유
+          </button>
         </div>
 
-      </div>
 
-      <div className="bottom">
-        <button className="share-btn" onClick={handlePost}>
-          공유
-        </button>
+        {/* 로딩 오버레이 */}
+        {isLoading && (
+          <div className="loading_overlay">
+            <div className="spinner"></div>
+            <div className="loading_text">로딩중..</div>
+          </div>
+        )}
       </div>
 
     </div>
