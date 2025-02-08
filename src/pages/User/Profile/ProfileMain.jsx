@@ -13,7 +13,7 @@ import { PATHS } from '../../../routes/paths';
 
 function ProfileMain() {
     const [userProfileData, setUserProfileData] = useState({});
-    const [selectedPet, setSelectedPet] = useState(111); // 선택된 pet
+    const [selectedPet, setSelectedPet] = useState(0); // 선택된 pet
     const [imageList, setImageList] = useState([]); // pet Image list
     const [badgeList, setBadgeList] = useState([]);
     const [dogList, setDogList] = useState([]);
@@ -34,6 +34,7 @@ function ProfileMain() {
         getFollowerList();
         setIsFollowList(false);
         getDogList();
+        getPhotoList();
         // getUserNoTest();
     }, [username]);
 
@@ -89,8 +90,18 @@ function ProfileMain() {
         }
     }
 
+    const getPhotoList = async () => {
+        try {
+            let {data} = await axios.get('http://localhost:8181/user/getPhotoList?userId='+ username );
+            setImageList(data);
+            console.log("피드 포토 리스트-----------------" , data);
+        }catch(error) {
 
-    getDogList
+        }
+    }
+
+
+
 
     const navigate = useNavigate();
 
@@ -177,23 +188,6 @@ function ProfileMain() {
         return selectedPet !== '' && dogList.map(dog => dog.dogNo).indexOf(selectedPet) >= 0;
     }
 
-    // pet image list 조회 함수
-    // 수정해야함
-    const getImageList = async () => {
-        let {data} = await axios.get('http://localhost:8181/photo/getImageList?type='
-            + (
-                checkIsMyPet()
-                    ? 'dog&id=' + selectedPet : 'user&id=' + userProfileData.userNo));
-        setImageList(data);
-     
-            const selectedDog = dogList.find(dog => dog.dogNo === selectedPet);
-
-           
-            setSelectedDogData(selectedDog || {});
-        
-        console.log(JSON.stringify(data)+ "눌렸을때 넘어갈 값" , selectedDog);
-    }
-
     // 뱃지 리스트
     // const getBadgeList = async () => {
     //     let {data} = await axios.get('http://localhost:8181/badge/getBadgeList?type='
@@ -207,7 +201,7 @@ function ProfileMain() {
     useEffect(() => {
         console.log("selectedPet" , selectedPet);
         if (userProfileData.userNo === undefined) return;
-        getImageList();
+        // getImageList();
         // getBadgeList();
     }, [userProfileData, selectedPet]);
 
@@ -317,7 +311,8 @@ function ProfileMain() {
 
      
             <ProfilePetInfo 
-                selectedDogData = {selectedDogData}
+                dogList = {dogList}
+                selectedPet = {selectedPet}
             />
 
 

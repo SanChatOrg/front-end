@@ -9,7 +9,7 @@ import MapWalkDisplay from './MapWalkDisplay';
 
 function MapAPI4() {
     const [location, setLocation] = useState({ latitude: null, longitude: null });
-    const [name, setName] = useState("brown1234");
+    const [name, setName] = useState("minjun85");
     const [chatt, setChatt] = useState([]);
     const [chkLog, setChkLog] = useState(false);
     const [socketData, setSocketData] = useState();
@@ -21,6 +21,13 @@ function MapAPI4() {
       // 마커용 데이터 
       // 마커에 찍는 이미지는 따로 원형으로 마커용 이미지를 생성해야할 것 같음.
     
+      const imageUrls = [
+        // "https://res.cloudinary.com/dtzx9nu3d/image/upload/v1738946069/anime_dog_zdvth5.gif",
+        "https://res.cloudinary.com/dtzx9nu3d/image/upload/v1738946966/nix7m9qwlrazec2kchrm.gif",
+        "https://res.cloudinary.com/dtzx9nu3d/image/upload/v1738947115/zzc0jfsixh3at396xz2y.gif"
+      ];
+      
+
     const [UserProfileData, setUserProfileData] = useState([{
       photo: '',
       userName: '',
@@ -110,6 +117,10 @@ function MapAPI4() {
     }
   }
 
+
+
+
+  
     // 첫 데이터 가져오기, 위치 정보 가져오기
     useEffect(() => {
 
@@ -145,17 +156,21 @@ function MapAPI4() {
       console.log("test--------" , test);
   
     },[test])
-    
-    // 소켓 로그
-      useEffect(() => {
-          if(socketData !== undefined) {
 
-              const tempData = chatt.concat(socketData);
-              console.log("chatt------" , tempData);
-              setChatt(tempData);
 
-          }
-      }, [socketData]);
+    //소켓 로그그
+    useEffect(() => {
+      if (socketData !== undefined) {
+          setChatt((prevChatt) => {
+              const updatedMap = new Map(prevChatt); // 기존 데이터를 Map으로 변환
+              updatedMap.set(socketData.userId, socketData); // 새 데이터 추가 또는 업데이트
+              return updatedMap;
+          });
+          console.log(chatt);
+          
+      }
+  }, [socketData]);
+  
   
       // 소켓 닫기
       const end = useCallback(() => {
@@ -193,12 +208,9 @@ function MapAPI4() {
           }
               const data = {
                 userId: myProfileData.userId, // 사용자 아이디 (예시)
-                userName : myProfileData.userName,
                 date: new Date().toLocaleString(), // 현재 날짜 및 시간
                 latitude: myProfileData.location.latitude, // 위도
-                longitude: myProfileData.location.longitude, // 경도
-                dogList: myProfileData.dogList,
-                userIntro : myProfileData.userIntro,
+                longitude: myProfileData.location.longitude,
                 type : 'LOCATION'
               };  //전송 데이터(JSON)
   
@@ -208,6 +220,7 @@ function MapAPI4() {
                   ws.current.onopen = () => { //webSocket이 맺어지고 난 후, 실행
                       console.log(ws.current.readyState);
                       console.log("웹소켓 연결 상태");
+                      alert("소켓에 연결되었습니다.");
                       ws.current.send(temp);
                       socketList(); // 소켓 접속 리스트 
                   }
@@ -250,16 +263,24 @@ function MapAPI4() {
       //webSocket
       //webSocket
 
+      
 
-
-      //마커 데이터 관리   
+      // 마커 데이터 관리   
         useEffect(() => {
 
           const updatedData  = [...UserProfileData];
 
+  
           // chatt 데이터를 순회하면서 UserProfileData를 업데이트
           chatt.forEach((chat) => {
-              const existingUser = updatedData.find((user) => user.name === chat.name);
+          //   if (chat.type === 'CLOSE') {
+          //     // 'CLOSE' 타입일 경우 해당 userId를 가진 유저를 제거
+          //     const filteredData = updatedData.filter((user) => user.userId !== chat.userId);
+          //     setUserProfileData(filteredData); // 업데이트된 데이터로 상태 변경
+          //     return; // 'CLOSE' 타입이면 더 이상 처리하지 않음
+          // }
+
+              const existingUser = updatedData.find((user) => user.userId === chat.userId);
 
               if (existingUser) {
                   // 기존 데이터의 위치만 업데이트
@@ -267,7 +288,7 @@ function MapAPI4() {
               } else {
                   // 소켓 데이터들 
                   updatedData.push({
-                      image: 'src/assets/img/user/ex_user_profile_03.png',
+                      image: '',
                       name: chat.userName,
                       info: chat.userIntro,
                       dogList: chat.dogList,
@@ -340,14 +361,15 @@ function MapAPI4() {
 
         // // 마커 옵션
         const markerOptions = [];
+        const randomImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
         const myMarkerOptions = {
           position: myProfileData.position.destinationPoint(0, 0), // 90도 방향으로 15m 떨어진 위치
           map: mapRef.current,
           icon: {
-            url: myProfileData.photo,
-            size: new naver.maps.Size(50, 50),
-            origin: new naver.maps.Point(50, 50),
-            anchor: new naver.maps.Point(25, 26),
+            url: 'https://res.cloudinary.com/dtzx9nu3d/image/upload/v1738946069/anime_dog_zdvth5.gif',
+            size: new naver.maps.Size(150, 150),
+            origin: new naver.maps.Point(0, 0),
+            anchor: new naver.maps.Point(75, 75), // 이미지값 /2
           }
         };
         // 
@@ -373,16 +395,16 @@ function MapAPI4() {
         });
 
         for(let n = 0 ; n < UserProfileData.length; n++){
-
+          const randomImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
           // 마커 옵션 만들기
           markerOptions[n] = {
             position: new naver.maps.LatLng(UserProfileData[n].latitude, UserProfileData[n].longitude), // 90도 방향으로 15m 떨어진 위치
             map: mapRef.current,
             icon: {
-              url: `/image${n}.png`,
-              size: new naver.maps.Size(100, 100),
+              url: randomImage,
+              size: new naver.maps.Size(150, 150),
               origin: new naver.maps.Point(0, 0),
-              // anchor: new naver.maps.Point(25, 26),
+              anchor: new naver.maps.Point(75, 75), // 이미지값 /2
             },
           };
 
@@ -393,7 +415,7 @@ function MapAPI4() {
           // info 데이터 
           contentString[n] = ReactDOMServer.renderToString(      
             <ProfileModal      
-              image={UserProfileData[n].photoUrl} 
+              image={UserProfileData[n].photo} 
               name={UserProfileData[n].userName} 
               info={UserProfileData[n].userIntro} 
               dogList={UserProfileData[n].dogList}  

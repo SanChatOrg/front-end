@@ -30,7 +30,7 @@ const Footer = () => {
         <div className="icon chat-icon" />
         <span>채팅</span>
       </div>
-      <div className="footer-item" onClick={() => handleNavigation(PATHS.USER.PROFILE)}>
+      <div className="footer-item" onClick={() => handleNavigation(`${PATHS.USER.PROFILE}/minjun85`)}>
         <div className="icon profile-icon" />
         <span>마이페이지</span>
       </div>
