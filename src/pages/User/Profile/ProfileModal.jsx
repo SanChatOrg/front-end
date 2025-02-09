@@ -35,10 +35,10 @@ function ProfileModal({ image, name, info, dogList, walkStatus, goUserProflie })
           <div className={styles.ProfileModalRightBottom} >
             <div className={styles.ProfileModalDogList}>
               {/* 강아지 목록 */}
-              {dogList.map((dog, index) => (
-                <div key={index}>{dog}</div>
-              ))}
-            </div>
+              {dogList?.map((dog, index) => (
+                  <div key={index}>{dog}</div>
+                ))}
+              </div>
           </div>
         </div>
       </div>

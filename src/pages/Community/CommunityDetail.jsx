@@ -56,26 +56,18 @@ function CommunityDetail() {
 
   // 글 조회
   useEffect(() => {
-    fetch(`http://localhost:8181/community/getDetail/${communityNo}`) // 추후 선택된 글 ${communityNo} 변경예정
-      .then(response => {
+    const fetchCommunityDetail = async () => {
+      try {
+        const response = await fetch(`http://localhost:8181/community/getDetail/${communityNo}`);
         if (!response.ok) {
           throw new Error("글 조회 실패");
         }
-        return response.json();
-      })
-      .then(data => {
-        setPost({
-          ...data,
-          filePath: data?.photoList && data.photoList.length > 0
-            ? data.photoList.map(photo => photo.photoUrl)
-            : []
-        });
-        console.log(data);
+        const data = await response.json();
 
-
-
+        // 사진 URL 처리
         const imageUrls = data.photoList ? data.photoList.map(photo => photo.photoUrl) : [];
 
+        // 게시물 상태 업데이트
         setPost({
           profileImg: data.profilePhoto || defaultProfileImg,
           userName: data.userName,
@@ -86,18 +78,27 @@ function CommunityDetail() {
           communityNo: data.communityNo,
           userNo: data.userNo,
         });
-        return data.communityNo;
-      })
-      .then((communityNo) => {
-        return fetch(`http://localhost:8181/community/getReply/${communityNo}`);
-      })
-      .then(response => {
+        console.log("게시물 상세 정보: ", data);
+      } catch (error) {
+        console.error("에러 발생(게시물 조회): ", error);
+      }
+    };
+
+    fetchCommunityDetail();
+  }, [communityNo]);
+
+  // 댓글 조회
+  useEffect(() => {
+    if (!communityNo) return; // 글이 있을 때 불러오도록 함
+
+    const fetchCommunityReply = async () => {
+      try {
+        const response = await fetch(`http://localhost:8181/community/getReply/${communityNo}`);
         if (!response.ok) {
           throw new Error("댓글 조회 실패");
         }
-        return response.json();
-      })
-      .then(replyData => {
+        const replyData = await response.json();
+
         setGetReplyData(replyData.map(reply => ({
           communityNo: reply.communityNo,
           createdAt: calculateTime(reply.createdAt),
@@ -106,16 +107,20 @@ function CommunityDetail() {
           replyParentNo: reply.replyParentNo,
           updatedAt: calculateTime(reply.updatedAt),
           userNo: reply.userNo,
+          userName: reply.userName,
+          profileImg: reply.profilePhoto || defaultProfileImg,
         })));
-
         setReplyContent('');
-
         console.log("댓글: ", replyData);
-      })
-      .catch(error => console.error('에러 발생: ', error));
-  }, []);
+      } catch (error) {
+        console.error("에러 발생(댓글 조회): ", error);
+      }
+    };
 
-  // console.log("게시글에서 받아온 데이터: " + JSON.stringify(post));    
+    fetchCommunityReply();
+  }, [communityNo]);
+
+  // console.log("게시글에서 받아온 데이터: " + JSON.stringify(getReplyData));    
 
   // 댓글 본문 내용
   const handleContent = (e) => {
@@ -155,6 +160,8 @@ function CommunityDetail() {
         replyParentNo: data.replyParentNo || null,
         updatedAt: calculateTime(data.updatedAt),
         userNo: data.userNo,
+        userName: data.userName,
+        profileImg: data.profileImg || defaultProfileImg,
       }]);
 
       setReplyContent('');
@@ -227,6 +234,7 @@ function CommunityDetail() {
           handleContent={handleContent}
           handlePostBtn={handlePostBtn}
           handleOnClickDelete={handleOnClickDelete}
+          replyUserName={getReplyData.userName}
 
           replyData={getReplyData}
 

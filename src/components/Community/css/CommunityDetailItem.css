@@ -23,17 +23,13 @@
 }
 
 .detail-list {
-
   padding: 5px;
 }
-
-
 
 .detail-input {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   position: fixed;
   bottom: 65px;
   left: 50%;
@@ -43,12 +39,16 @@
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   z-index: 10;
-  height: 35px;
+  height: 26px;
   width: 478px;
 }
-
 
 .reply-time {
   margin-left: 46px;
   margin-top: -10px;
+}
+
+.detail-content-text {
+  margin-bottom: 10px;
+  margin-left: -15px;
 }

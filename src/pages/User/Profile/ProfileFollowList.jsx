@@ -19,7 +19,7 @@ function ProfileFollowList({goUserProflie , UnfollowUserBtnClick , isFollow ,set
                  <div className='follow-list-follower' key={follow.userNo}> 
                  <div className='follow-list-follow-box' onClick={() => goUserProflie(follow.userId)}>
                      <div className='follow-list-img'> 
-                         <img src="/src/assets/profile-image-002.png"/>  
+                         <img src={follow.photo.photoUrl}/>  
                      </div> 
                      <div>
                          {/* <div  onClick={() => goUserProflie(follow.userId)}> {follow.userName} </div> */}
@@ -41,7 +41,7 @@ function ProfileFollowList({goUserProflie , UnfollowUserBtnClick , isFollow ,set
                 <div className='follow-list-follower' key={follower.userNo}>  
                     <div className='follow-list-follow-box' onClick={() => goUserProflie(follower.userId)}>
                         <div className='follow-list-img'> 
-                            <img src="/src/assets/profile-image-002.png"/>  
+                            <img src={follower.photo.photoUrl}/>  
                         </div> 
                         <div>
                             <div> {follower.userName} </div>
