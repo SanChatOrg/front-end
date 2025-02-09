@@ -2,7 +2,7 @@
 import "../css/CommunityProfile.css";
 import CommunityReplyTime from "./CommunityReplyTime";
 
-function CommunityProfile({ profileImg, userName, replyTime, }) {
+function CommunityProfile({ profileImg, userName, replyTime }) {
   return (
     <div className="user-profile">
       <div className="profile-container">
