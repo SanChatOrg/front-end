@@ -10,6 +10,7 @@
   
   .pet-title  {
     margin-bottom: 10px;
+    font-size: 18px;
   }
   .pet-title > span {  
     color: var(--main-color);
@@ -53,7 +54,7 @@
   
   .pet-profile-gender {
     position: absolute;
-    top: 40px;
+    top: 55px;
     left: 55px;
     margin: 10px;
     border-radius: 100%;

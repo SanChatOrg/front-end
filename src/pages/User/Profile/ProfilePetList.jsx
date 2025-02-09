@@ -20,10 +20,10 @@ function ProfilePetList({ userName, dogList, onPetSelection }) {
         <div>
             <div className="profile-part2">
                 <div className="pet-title">
-                    <span>{userName}</span> 님의 애완견
+                    <span>{userName}</span> 님의 반려견
                 </div>
                 <div className="pet-list">
-                    {dogList.length > 0 &&
+                    {dogList && dogList.length > 0 &&
                         dogList.map((dog, index) => (
                             <div
                                 className={`pet-profile ${
@@ -33,7 +33,7 @@ function ProfilePetList({ userName, dogList, onPetSelection }) {
                                 onClick={() => handleSelectPet(dog.dogNo)}
                             >
                                 <div className="pet-profile-img">
-                                    <img src={dog.photo.photoUrl} alt="pet" />
+                                    <img src={dog.photo?.photoUrl} alt="pet" />
                                 </div>
 
                                 {dog.dogGender === 'M' ? (

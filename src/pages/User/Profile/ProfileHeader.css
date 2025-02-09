@@ -76,4 +76,27 @@
     background-color: #EEEEEE;
     border-radius: 15px;
     font-weight: bold;
+  }    
+  .user-profile-follow-btn > button {
+    font-size: 15px;
+    width: 100px;
+    padding: 3px 5px;
+    border: 1px solid var(--main-color);
+    color: var(--main-color);
+    background-color: var(--sub-color);
+    border-radius: 15px;
+    font-weight: bold;
+  }
+
+ 
+
+  .user-profile-following-btn > button {
+    font-size: 15px;
+    width: 100px;
+    padding: 3px 5px;
+    border: 1px solid #929292;
+    color: #666666;
+    background-color: #EEEEEE;
+    border-radius: 15px;
+    font-weight: bold;
   }

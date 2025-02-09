@@ -6,6 +6,7 @@
   gap: 10px;
   margin-bottom: 7px;
   margin-left: 5px;
+
 }
 
 .profile-container {
@@ -23,6 +24,6 @@
 }
 
 .userName {
-  font-size: 13px;
+  font-size: var(--text-size-s);
   font-weight: bold;
 }

@@ -4,10 +4,20 @@
     margin: 10px;
     border-radius: 10px;
     /* border: 1px solid var(--main-color); */
-    color: var(--main-color);
+    color: #666666;
+    
     font-weight: bold;
-
 }
+
+
+.profile-pet-info > div:nth-child(1){
+    font-size: 20px;
+    color: var(--main-color);
+}
+
+
+
+
 .pet-img > img {
     width: 100px;
     height: 100px;

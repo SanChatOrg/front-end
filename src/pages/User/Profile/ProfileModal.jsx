@@ -11,14 +11,7 @@ function ProfileModal({ image, name, info, dogList, walkStatus, goUserProflie })
         {/* 왼쪽 섹션 */}
         <div className={styles.ProfileModalLeft}>
           <div className={styles.ProfileModalImg}> <img src={image} alt="user-profile" /> </div>
-          <div className={styles.ProfileModalActive}>
-            {/* 산책 여부 아이콘 */}
-            {walkStatus ? (
-              <img src="src/assets/dog-paw-active.png" alt="Active" />
-            ) : (
-              <img src="src/assets/dog-paw-inactive.png" alt="Inactive" />
-            )}
-          </div>
+        
           <div className={styles.ProfileModalFollow} >
             <button className='click-btn'> 프로필 보기</button>
           </div>

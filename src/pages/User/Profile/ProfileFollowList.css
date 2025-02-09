@@ -4,18 +4,23 @@
     justify-content: space-around;
     padding : 5px ;
     gap: 10px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
 }
 
 .profile-main-follow > div {
     display: flex;
     width: 100%;
     justify-content: space-around;
-    background-color: #fff8e6;
+    background-color: var(--sub-color);
     /* padding: 5px 5px; */
     /* border-radius: 10px; */
     font-weight: bold;
     /* box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.19), 0 3px 3px rgb(255 255 255 / 7%); */
     /* border: 1px solid var(--main-color); */
+    padding: 5px;
+    border-radius: 10px;
+    
 }
 
 .profile-main-follow > div:hover {
@@ -77,8 +82,12 @@
     justify-content: center;
     gap: 20px;
   }
-
-    
+.user-profile-follow-btn{
+    margin-right: 10px;
+}
+.user-profile-following-btn {
+    margin-right: 10px;
+}
   .user-profile-follow-btn > button {
     font-size: 15px;
     width: 100px;

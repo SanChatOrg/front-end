@@ -220,6 +220,7 @@ function CommunityDetail() {
     <div>
       <Header pageName="글 보기" />
       <div className="detail-container">
+        
         <CommunityDetailItem
           profileImg={post.profileImg}
           userName={post.userName}

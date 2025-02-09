@@ -33,7 +33,7 @@ function ChatRoomFooter({stompClient, chatRoomNoParam}) {
 
       <ChatButton
         className="chat-room-footer-camera-btn"
-        image="/icons/ic_chat_camera_btn.svg"
+        image="/icons/photo_camera.svg"
       />
 
       <ChatMessageInput
@@ -46,7 +46,7 @@ function ChatRoomFooter({stompClient, chatRoomNoParam}) {
 
       <ChatButton
         className="chat-room-footer-send-btn"
-        image="/icons/ic_chat_send_btn.svg"
+        image="/icons/send.svg"
         handleOnClick={sendMessage}
       />
 

@@ -59,11 +59,11 @@ function ChatRoomPage() {
         console.log(messages);
     }, [messages]);
     return (
-        <>
+        <div>
             <ChatRoomHeader name={name} image={image}/>
             <ChatRoomBody messages={messages} userNo={userNo}/>
             <ChatRoomFooter stompClient={stompClient} chatRoomNoParam={chatRoomNoParam}/>
-        </>
+        </div>
     )
 }
 

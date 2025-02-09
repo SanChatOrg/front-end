@@ -6,10 +6,12 @@ import ProfilePetList from './ProfilePetList';
 import ProfileFollow from './ProfileFollow';
 import ProfileFollowList from './ProfileFollowList';
 import ProfilePetInfo from './ProfilePetInfo';
+import Header from './Header';
 import axios from "axios";
 import {act, useEffect, useState} from "react";
 import ProfileTabMenu from './ProfileTabMenu';
 import { PATHS } from '../../../routes/paths';
+import './ProfileMain.css';
 
 function ProfileMain() {
     const [userProfileData, setUserProfileData] = useState({});
@@ -18,12 +20,18 @@ function ProfileMain() {
     const [badgeList, setBadgeList] = useState([]);
     const [dogList, setDogList] = useState([]);
     const [followList, setfollowList] = useState([]);
+    const [myFollowList, setMyFollowList] = useState([]);
     const [followerList, setfollowerList] = useState([]);
-    const [session , setSession] = useState("brown1234");
+    const [session , setSession] = useState("minjun85");
 
     // 클릭한 userId 값 받아오기
     const {state} = useLocation();
     console.log(state);
+
+    const alertSetting = () => {
+        alert("setting 페이지");
+      }
+    
 
 
     const { username } = useParams();
@@ -36,6 +44,7 @@ function ProfileMain() {
         getDogList();
         getPhotoList();
         // getUserNoTest();
+        getMyFollowList();
     }, [username]);
 
 
@@ -56,6 +65,16 @@ function ProfileMain() {
             let {data} = await axios.get('http://localhost:8181/follow/getFollowList?userId=' + username);
             console.log("팔로우리스트" , data);
             setfollowList(data);
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
+    };
+
+    const getMyFollowList = async () => {
+        try {
+            let {data} = await axios.get('http://localhost:8181/follow/getFollowList?userId=' + "minjun85");
+            console.log("팔로우리스트" , data);
+            setMyFollowList(data);
         } catch (error) {
             console.error("Error fetching user data:", error);
         }
@@ -140,6 +159,7 @@ function ProfileMain() {
             console.log("팔로우 완료");
             getFollowList();
             getFollowerList();
+            getMyFollowList();
             
         } catch (error) {
             console.error("Error fetching user data:", error);
@@ -160,6 +180,7 @@ function ProfileMain() {
             console.log("언팔로우 완료");
             getFollowList();
             getFollowerList();
+            getMyFollowList();
             
         } catch (error) {
             console.error("Error fetching user data:", error);
@@ -170,7 +191,7 @@ function ProfileMain() {
 
 
     useEffect(() => {
-        if (dogList.length === 1) setSelectedPet(dogList[0].dogNo);
+        if (dogList && dogList.length === 1) setSelectedPet(dogList[0].dogNo);
     }, [dogList]);
 
 
@@ -254,6 +275,10 @@ function ProfileMain() {
     return (
 
         <div>
+
+            <Header
+                alertSetting = {alertSetting}
+            />
            
             <ProfileHeader
                 userId={userProfileData.userId || ''}
@@ -261,6 +286,12 @@ function ProfileMain() {
                 userInfo={userProfileData.userIntro || ''}
                 userImage={userProfileData.photo || '#'}
                 session = {session}
+                followerList = {followerList}
+                followUserBtnClick = {followUserBtnClick}
+                UnfollowUserBtnClick = {UnfollowUserBtnClick}
+                myFollowList = {myFollowList}
+                userNo = {userProfileData.userNo || ''}
+                alertSetting = {alertSetting}
             />
 
            <ProfileFollow 
@@ -291,6 +322,7 @@ function ProfileMain() {
                 followUserBtnClick = {followUserBtnClick}
                 UnfollowUserBtnClick = {UnfollowUserBtnClick}
                 goUserProflie = {goUserProflie} 
+                
             /> 
             </>
            

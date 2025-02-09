@@ -1,6 +1,6 @@
 .chat-list {
-  background-color: var(--white);
+  background-color: #fff;
   height: 100%;
-  min-height: 800px;
+  min-height: 700px;
   border-radius: var(--chat-radius-default);
 }
