@@ -2,7 +2,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import "../css/CommunityReplyBtn.css"
 import { PATHS } from "../../../routes/paths";
-import replyBtn from "../../../assets/replyBtn.svg"
+import replyBtn from "../../../assets/replyBtn.png"
 
 
 function CommunityReplyBtn({ replyCount, communityNo }) {

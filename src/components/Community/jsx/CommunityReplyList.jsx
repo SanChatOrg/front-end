@@ -5,8 +5,9 @@ import CommunityReplyTime from "./CommunityReplyTime";
 import "../css/CommunityReplyList.css";
 import CommunityReplyOption from "./CommunityReplyOption";
 import CommunityChildReply from "./CommunityChildReply";
+import CommunityReplyProfile from "./CommunityReplyProfile";
 
-function CommunityReplyList({ profileImg, userName, replyData, handleOnClickDelete, onMentionUser }) {
+function CommunityReplyList({ profileImg, userName, replyData, handleOnClickDelete, onMentionUser, replyUserName }) {
   return (
     <div>
       {replyData.map((reply) => (
@@ -14,7 +15,7 @@ function CommunityReplyList({ profileImg, userName, replyData, handleOnClickDele
           <div className="detail-reply-left">
 
             <div className="profile-time-wrapper">
-              <CommunityProfile profileImg={profileImg} userName={userName} replyTime={reply.createdAt} />
+              <CommunityReplyProfile profileImg={reply.profileImg} replyTime={reply.createdAt} userName={reply.userName} />
             </div>
 
             <div className="reply-content-wrapper">

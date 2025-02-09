@@ -2,7 +2,7 @@
 import "../css/CommunityProfile.css";
 import CommunityReplyTime from "./CommunityReplyTime";
 
-function CommunityProfile({ profileImg, userName, replyTime, }) {
+function CommunityReplyProfile({ profileImg, userName, replyTime, replyUserName }) {
   return (
     <div className="user-profile">
       <div className="profile-container">
@@ -20,4 +20,4 @@ function CommunityProfile({ profileImg, userName, replyTime, }) {
     </div>
   );
 }
-export default CommunityProfile;
+export default CommunityReplyProfile;

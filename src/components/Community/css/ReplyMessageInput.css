@@ -4,6 +4,6 @@
   outline: none;
   background-color: var(--chat-input-color-send);
   font-size: 16px;
-  line-height: 40px;
+  line-height: 33px;
   padding-left: 10px;
 }

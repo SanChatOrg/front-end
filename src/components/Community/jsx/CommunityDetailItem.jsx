@@ -9,7 +9,7 @@ import CommunityPostTime from "./CommunityPostTime";
 import CommunityProfile from "./CommunityProfile";
 import CommunityReplyList from "./CommunityReplyList";
 
-function CommunityDetailItem({ profileImg, userName, text, postImg, postTime, replyCnt, handleContent, handlePostBtn, replyData, handleOnClickDelete, handleMentionUser, replyContent, handlePostDelete, communityNo }) {
+function CommunityDetailItem({ profileImg, userName, text, postImg, postTime, replyCnt, handleContent, handlePostBtn, replyData, handleOnClickDelete, handleMentionUser, replyContent, handlePostDelete, communityNo, replyUserName }) {
   return (
     <div>
       <div className="detail-header">
@@ -23,8 +23,12 @@ function CommunityDetailItem({ profileImg, userName, text, postImg, postTime, re
       <CommunityPostImg postImg={postImg} />
 
       <div className="detail-text">
-        <CommunityPostText userName={userName} text={text} />
-        <CommunityPostTime postTime={postTime} />
+        <div className="detail-content-text">
+          <CommunityPostText userName={userName} text={text} />
+        </div>
+        <div className="detail-content-time">
+          <CommunityPostTime postTime={postTime} />
+        </div>
       </div>
 
       <div className="detail-count">
@@ -32,7 +36,7 @@ function CommunityDetailItem({ profileImg, userName, text, postImg, postTime, re
       </div>
 
       <div className="detail-list">
-        <CommunityReplyList profileImg={profileImg} userName={userName} replyData={replyData} handleOnClickDelete={handleOnClickDelete} onMentionUser={handleMentionUser} />
+        <CommunityReplyList profileImg={profileImg} userName={userName} replyData={replyData} handleOnClickDelete={handleOnClickDelete} onMentionUser={handleMentionUser} replyUserName={replyUserName} />
       </div>
 
       <div className="detail-input">
