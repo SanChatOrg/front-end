@@ -1,5 +1,9 @@
 /* src/pages/Community/CommunityWrite.css */
 
+* {
+  font-family: var(--font-family);
+}
+
 div {
   margin: 0;
   padding: 0;

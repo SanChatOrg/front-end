@@ -1,5 +1,27 @@
 .chat-search-container {
-  padding: var(--chat-padding-default) 0;
-  display: flex;
-  justify-content: space-between;
+  display: flex
+  ;
+      align-items: center;
+      justify-content: space-between;
+      height: 50px;
+      line-height: 50px;
+      border-bottom: 1px solid #b6b6b6;
+      padding: 6px 18px;
+      position: relative;
+      margin-bottom: 20px;
+}
+
+.write-btn {
+  position: absolute;
+  right: 20px;
+  color: #333;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.write-btn-img {
+  width: 20px;
+  height: 20px;
 }

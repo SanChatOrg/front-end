@@ -1,5 +1,7 @@
 /* src/pages/Community/CommunityMain.css */
-
+* {
+  font-family: var(--font-family);
+}
 .detail-container {
   display: flex;
   flex-direction: column;

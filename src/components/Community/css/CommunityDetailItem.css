@@ -39,8 +39,12 @@
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   z-index: 10;
-  height: 26px;
+  height: 30px;
   width: 478px;
+}
+
+.detail-reply:nth-last-child(1){
+  margin-bottom: 30px;
 }
 
 .reply-time {

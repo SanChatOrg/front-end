@@ -4,10 +4,10 @@ import ReplyButton from "./ReplyButton";
 
 function CommunityDetailFooter({ userName, handleContent, handlePostBtn, replyContent }) {
   return (
-    <div className="chat-room-footer-container">
+    <div className="reply-room-footer-container">
 
       <ReplyMessageInput
-        className="chat-room-footer-input"
+        className="reply-room-footer-input"
         type="text"
         placeholder={`${userName}에게 댓글 추가...`}
         value={replyContent}
@@ -15,8 +15,8 @@ function CommunityDetailFooter({ userName, handleContent, handlePostBtn, replyCo
       />
 
       <ReplyButton
-        className="chat-room-footer-send-btn"
-        image="/icons/ic_chat_send_btn.svg"
+        className="reply-room-footer-send-btn"
+        image="/icons/send.svg"
         handlePostBtn={handlePostBtn}
       />
 

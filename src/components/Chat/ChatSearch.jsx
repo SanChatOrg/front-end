@@ -9,7 +9,7 @@ function ChatSearch() {
 
       <ChatSearchInput type="text" placeholder="검색"/>
 
-      <ChatButton image='/icons/ic_chat_search.svg'/>
+      <ChatButton image='/icons/search.svg'/>
 
     </div>
     

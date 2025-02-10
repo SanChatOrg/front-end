@@ -8,8 +8,8 @@ function ProfilePetInfo({dogList , selectedPet}) {
     return (
         <div>
        
-            
-            {dogList.map((dog,index) => (
+
+           { dogList && dogList.map((dog,index) => (
 
                 (dog.dogNo === selectedPet &&
                 <div className='profile-pet-info'>
@@ -24,7 +24,7 @@ function ProfilePetInfo({dogList , selectedPet}) {
                 
                 </div>)
             ))}
-                
+
             
             
             

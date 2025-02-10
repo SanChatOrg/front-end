@@ -3,6 +3,12 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--chat-padding-default);
+  position: absolute;
+  bottom: 71px;
+  /* width: 500px; */
+  width: 500px;
+
+/* content 에 realtive ??? ? */
 }
 
 .chat-room-footer-camera-btn,

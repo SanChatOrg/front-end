@@ -1,16 +1,16 @@
-.chat-room-footer-container {
+.reply-room-footer-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
 }
 
-.chat-room-footer-send-btn {
+.reply-room-footer-send-btn {
   width: 54px;
   height: auto;
 }
 
-.chat-room-footer-input {
+.reply-room-footer-input {
   height: auto;
   width: 100%;
   display: flex;
@@ -20,7 +20,8 @@
   width: 100%;
 }
 
-.chat-room-footer-input::placeholder {
+.reply-room-footer-input::placeholder {
   font-size: 12px;
 }
+
 

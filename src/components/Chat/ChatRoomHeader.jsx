@@ -21,7 +21,7 @@ function ChatRoomHeader({name, image}) {
 
       <ChatButton 
         className="chat-room-back-btn" 
-        image="/icons/ic_chat_back_btn.svg" 
+        image="/icons/navigate_before.svg" 
         handleOnClick={handleOnClickBackBtn}
       />
 
@@ -34,7 +34,7 @@ function ChatRoomHeader({name, image}) {
 
       <ChatButton 
         className="chat-room-search-btn" 
-        image="/icons/ic_chat_search.svg"
+        image="/icons/search.svg"
       />
 
     </div>

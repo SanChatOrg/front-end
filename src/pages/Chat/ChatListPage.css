@@ -1,4 +1,8 @@
 .chat-list-container {
-  background-color: var(--chat-background-color-default);
-  padding: var(--chat-padding-default);
+  background-color: #fff;
+  padding: 0px 10px;
+}
+
+* {
+  font-family: var(--font-family);
 }

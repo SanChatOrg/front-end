@@ -9,13 +9,30 @@
  }
  */
 
+ @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&family=Noto+Sans+KR&display=swap');
 
+ /* .nanum-gothic-regular {
+    font-family: "Nanum Gothic", serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+   */
+.noto-sans-kr- {
+    font-family: "Noto Sans KR", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  
 :root {
-    --main-color: #B95C31;
-    --sub-color: #F5EDD8; 
+    --text-size-m : 18px;
+    --text-size-s : 13px;
+    --font-family: "Noto Sans KR", serif;
+    --main-color: #9f6651;
+    --sub-color: #f6ede2;
     --dog-icon-in-color: #BEC2C4;
     --dog-icon-out-color: #DEDEDE;
-    --font-family: 'Arial, sans-serif';
     --gray: #CCCCCC;
     --black: #0E0E0E;
     --white: #FFFEF9;
@@ -27,5 +44,6 @@
     --chat-radius-default: 5px;
     --chat-radius-larger: 10px;
 }
+
 
 

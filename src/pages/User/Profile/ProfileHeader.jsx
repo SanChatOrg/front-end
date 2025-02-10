@@ -1,11 +1,12 @@
 import './ProfileHeader.css';
 import {useParams} from 'react-router-dom';
 import ProfileFollow from './ProfileFollow';
-function ProfileHeader({userName , userInfo , userImage, userId, session }) {
-
-  console.log(session);
+function ProfileHeader({userName , userInfo , userImage, userId, userNo, session, myFollowList, followUserBtnClick, UnfollowUserBtnClick, alertSetting }) {
 
   const { username } = useParams();
+
+  console.log(myFollowList , "할로우우");
+  
 
   return (
     
@@ -27,10 +28,22 @@ function ProfileHeader({userName , userInfo , userImage, userId, session }) {
             {/* 따로 처리 필요 세션에 따라 변경! */}
         
             { session === username  ?
-             <div className='user-profile-myProfile'> <button> 내 프로필 </button>  </div>
+             <div className='user-profile-myProfile'> <button onClick={() => alertSetting()}> 내 프로필 </button>  </div>
                 
                 :
-                <div className='user-profile-follow'> <button> 팔로우 하기 </button>  </div>
+                <>
+                {myFollowList.some((follower) => follower.userId === userId) ? (
+                  <div className="user-profile-following-btn" onClick={() => UnfollowUserBtnClick(userNo)}>
+                    <button>팔로잉</button>
+                  </div>
+                ) : (
+                  <div className="user-profile-follow-btn" onClick={() => followUserBtnClick(userNo)}>
+                    <button>팔로우</button>
+                  </div>
+                )}
+
+              </>
+              
             }
         
       

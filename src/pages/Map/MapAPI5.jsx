@@ -8,6 +8,7 @@ import ProfileModal from '../User/Profile/ProfileModal';
 import MapWalkDisplay from './MapWalkDisplay';
 
 function MapAPI4() {
+  
     const [location, setLocation] = useState({ latitude: null, longitude: null });
     const [name, setName] = useState("minjun85");
     const [chatt, setChatt] = useState([]);
@@ -23,8 +24,8 @@ function MapAPI4() {
     
       const imageUrls = [
         // "https://res.cloudinary.com/dtzx9nu3d/image/upload/v1738946069/anime_dog_zdvth5.gif",
-        "https://res.cloudinary.com/dtzx9nu3d/image/upload/v1738946966/nix7m9qwlrazec2kchrm.gif",
-        "https://res.cloudinary.com/dtzx9nu3d/image/upload/v1738947115/zzc0jfsixh3at396xz2y.gif"
+        "https://res.cloudinary.com/dtzx9nu3d/image/upload/c_scale,h_136,w_110/nix7m9qwlrazec2kchrm",
+        "https://res.cloudinary.com/dtzx9nu3d/image/upload/c_scale,h_90,w_110/v1738947115/zzc0jfsixh3at396xz2y.gif"
       ];
       
 
@@ -46,7 +47,7 @@ function MapAPI4() {
       dogList: [""],
       walkStatus: true,
       userId: '',
-      position: null, // 초기 위치를 null로 설정
+      location: { latitude: 37.551104, longitude: 127.162040 }, // 초기 위치를 null로 설정
     });
 
     const [test, setTest] = useState(null);
@@ -125,22 +126,30 @@ function MapAPI4() {
     useEffect(() => {
 
       setData();
-
       const watchId = navigator.geolocation.watchPosition(
         (position) => {
+          if (!position || !position.coords) {
+            console.warn("위치 정보를 가져올 수 없습니다.");
+            return; // 값이 없으면 함수 종료
+          }
+      
+          const { latitude, longitude } = position.coords;
+      
+          // 위치가 정상적으로 전달되었을 때만 상태 업데이트
           setMyProfileData((prevData) => ({
-            ...prevData,
-            position: new naver.maps.LatLng(position.coords.latitude, position.coords.longitude),
-            location: {latitude : position.coords.latitude, longitude :position.coords.longitude}
+            ...prevData, // prevData는 기본값 사용
+            position: new naver.maps.LatLng(latitude, longitude), // 위치 객체 생성 (네이버 지도 사용 시)
+            location: { latitude, longitude }, // 위치 정보 업데이트
           }));
-
-          console.log(position.coords.latitude, position.coords.longitude);
-        
+      
+          console.log("위도:", latitude, "경도:", longitude); // 디버깅 로그
         },
         (error) => {
-          console.error("위치 에러 : ", error.message);
+          console.error("위치 정보를 가져오는 데 실패했습니다:", error);
         }
       );
+      
+      
       return () => navigator.geolocation.clearWatch(watchId);
       
     }, []);
@@ -185,6 +194,7 @@ function MapAPI4() {
           // 데이터 전송
           ws.current.send(JSON.stringify(data));
           console.log("Close request sent:", data);
+          alert("산책이 종료되었습니다.");
     
          
           ws.current.close(); // 소켓 닫기
@@ -220,7 +230,7 @@ function MapAPI4() {
                   ws.current.onopen = () => { //webSocket이 맺어지고 난 후, 실행
                       console.log(ws.current.readyState);
                       console.log("웹소켓 연결 상태");
-                      alert("소켓에 연결되었습니다.");
+                      alert("산책이 시작되었습니다.");
                       ws.current.send(temp);
                       socketList(); // 소켓 접속 리스트 
                   }
@@ -253,6 +263,7 @@ function MapAPI4() {
             const dataSet = JSON.parse(message.data);
             setSocketData(dataSet);
             console.log(dataSet, "data set");
+
         }
       });
   
@@ -270,7 +281,7 @@ function MapAPI4() {
 
           const updatedData  = [...UserProfileData];
 
-  
+
           // chatt 데이터를 순회하면서 UserProfileData를 업데이트
           chatt.forEach((chat) => {
           //   if (chat.type === 'CLOSE') {
@@ -285,6 +296,7 @@ function MapAPI4() {
               if (existingUser) {
                   // 기존 데이터의 위치만 업데이트
                   existingUser.position = new naver.maps.LatLng(chat.latitude, chat.longitude);
+                
               } else {
                   // 소켓 데이터들 
                   updatedData.push({
@@ -315,10 +327,10 @@ function MapAPI4() {
       const { naver } = window;
 
       if (naver) {
-        console.log("지도 기본 위치 -------" , myProfileData.position);
+        console.log("지도 기본 위치 -------" , myProfileData.location);
         // 지도 객체 생성하기
         const mapOptions = {
-          center: myProfileData.position, // 내 위치
+          center: new naver.maps.LatLng(myProfileData.location?.latitude || 37.5665, myProfileData. location?.longitude || 126.9780), // 내 위치
           zoom: 10,
           minZoom: 18,
           useStyleMap: false,
@@ -359,11 +371,12 @@ function MapAPI4() {
           pixelOffset: new naver.maps.Point(0, -10),
         });
 
+
         // // 마커 옵션
         const markerOptions = [];
         const randomImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
         const myMarkerOptions = {
-          position: myProfileData.position.destinationPoint(0, 0), // 90도 방향으로 15m 떨어진 위치
+          position: new naver.maps.LatLng(myProfileData.location?.latitude || 37.5665, myProfileData. location?.longitude || 126.9780), // 내 위치
           map: mapRef.current,
           icon: {
             url: 'https://res.cloudinary.com/dtzx9nu3d/image/upload/v1738946069/anime_dog_zdvth5.gif',
@@ -394,8 +407,11 @@ function MapAPI4() {
           }
         });
 
+       
+
         for(let n = 0 ; n < UserProfileData.length; n++){
           const randomImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+          
           // 마커 옵션 만들기
           markerOptions[n] = {
             position: new naver.maps.LatLng(UserProfileData[n].latitude, UserProfileData[n].longitude), // 90도 방향으로 15m 떨어진 위치
@@ -469,24 +485,29 @@ function MapAPI4() {
       }
     };
     
-      {/* 내 위치 바로가기 */}
-      <div className='map-my-location'> 
-          <button onClick={goMyLocation}> 📍 </button>
-      </div>
-
-      {/* 보이기 버튼 */}
-      <div className='map-view-mode'> 
-          <button onClick={goUserProflie}> 👁️ </button>
-      </div>
+  
 
   return (
     <>
       <div className='map-box'>
-      <div className='walk-box'>
-        <input type='button' value='산책 시작' id='btnSend' onClick={send}/>
-        <input type='button' value='산책 종료' id='end' onClick={end}/>
-      </div>
+  
+
+              {/* 내 위치 바로가기 */}
+              <div className='map-my-location'> 
+                  <button onClick={goMyLocation}> 📍 </button>
+              </div>
+
+              {/* 보이기 버튼 */}
+              <div className='map-view-mode'> 
+                  {/* <button onClick={goUserProflie}> 👁️ </button> */}
+              </div>
+
+              <div className='walk-box'>
+                <input type='button' value='산책 시작' id='btnSend' onClick={send}/>
+                <input type='button' value='산책 종료' id='end' onClick={end}/>
+              </div>
          {/* 지도 영역 */}
+            
         <div
             ref={mapContainer}
             className='naver-map'

@@ -6,6 +6,7 @@ function ProfileFollowList({goUserProflie , UnfollowUserBtnClick , isFollow ,set
     console.log(followList);
     console.log(followerList);
 
+
     return (
         <div>
 
@@ -23,7 +24,7 @@ function ProfileFollowList({goUserProflie , UnfollowUserBtnClick , isFollow ,set
                      </div> 
                      <div>
                          {/* <div  onClick={() => goUserProflie(follow.userId)}> {follow.userName} </div> */}
-                         <div  > {follow.userName} </div>
+                         <div style={{ fontWeight: "bold" }}> {follow.userName} </div>
                          <div > ({follow.userId})</div>
                      </div>
                  </div>
@@ -44,7 +45,7 @@ function ProfileFollowList({goUserProflie , UnfollowUserBtnClick , isFollow ,set
                             <img src={follower.photo.photoUrl}/>  
                         </div> 
                         <div>
-                            <div> {follower.userName} </div>
+                        <div style={{ fontWeight: "bold" }}>  {follower.userName} </div>
                             <div >({follower.userId})</div>
                         </div>
                     </div>

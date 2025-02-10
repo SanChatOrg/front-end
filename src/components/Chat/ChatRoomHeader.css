@@ -1,5 +1,5 @@
 .chat-room-header {
-  padding: 10px 20px;
+  padding: 2px 20px;
   display: flex;
   align-items: center;
 }
@@ -26,3 +26,4 @@
 .chat-room-search-btn {
   width: 40px;
 }
+

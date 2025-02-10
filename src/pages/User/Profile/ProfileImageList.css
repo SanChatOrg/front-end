@@ -9,7 +9,9 @@
     grid-template-columns: repeat(3,1fr);
     gap: 10px;
   }
-  
+  .profile-part3 > div {
+    height: 150px;
+  }
   .profile-grid-img {
     object-fit: cover;
     width: 100%;
