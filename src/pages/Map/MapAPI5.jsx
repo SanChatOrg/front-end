@@ -29,16 +29,8 @@ function MapAPI4() {
       ];
       
 
-    const [UserProfileData, setUserProfileData] = useState([{
-      photo: '',
-      userName: '',
-      userIntro: '입력한 정보가 없습니다.',
-      dogList: [""],
-      walkStatus: true,
-      userId: '',
-      position: null, // 초기 위치를 null로 설정
-      location: { latitude: null, longitude: null }
-    }]);
+    const [UserProfileData, setUserProfileData] = useState([
+  ]);
 
     const [myProfileData, setMyProfileData] = useState({
       photo: '',
@@ -48,10 +40,11 @@ function MapAPI4() {
       walkStatus: true,
       userId: '',
       location: { latitude: 37.551104, longitude: 127.162040 }, // 초기 위치를 null로 설정
+      position: null
     });
 
     const [test, setTest] = useState(null);
-    
+    const [userList, setUserList] = useState();
     // 프로필 이동 (네비게이트)
     const goUserProflie = (userId) => { 
       navigate(`${PATHS.USER.PROFILE}/${userId}`, { state: userId });
@@ -67,56 +60,16 @@ function MapAPI4() {
            // dogList에서 dogName만 추출하여 새로운 배열로 업데이트
             const dogNames = data.dogList.map(dog => dog.dogName); 
             const photoUrl = data.photo.photoUrl;
-
-            setMyProfileData({
-              ...data,
+            setMyProfileData(prevData => ({
+              ...prevData, // 기존 데이터 유지
+              ...data, // 새로운 데이터 병합
               photo: photoUrl,
-              dogList : dogNames
-            });
+              dogList: dogNames
+          }));
       } catch (error) {
           console.error("Error fetching user data:", error);
       }
   };
-  
-  const socketList = async () => {
-    try {
-      const response = await axios.get('http://localhost:8181/user/socketList');
-      console.log("소켓 접속 리스트 " , response.data ); // 서버에서 받은 데이터를 콘솔에 출력
-      // JSON 데이터를 Map으로 변환
-      // const userMap = new Map(
-      //   Object.entries(response.data).map(([key, value]) => [
-      //     key,
-      //     {
-      //       ...value,
-      //       position: new naver.maps.LatLng(
-      //         value.latitude,
-      //         value.longitude
-      //       ),
-      //       photo : value.photo.photoUrl,
-      //       dogList: value.dogList ? value.dogList.map(dog => dog.dogName) : [],
-
-      //     },
-      //   ])
-      // );
-
-    // setTest(userArray);  // 배열로 변환된 데이터로 상태 업데이트
-
-        const userArray = Object.entries(response.data)
-        .map(([key, value]) => ({
-          ...value,
-          position: new naver.maps.LatLng(value.latitude, value.longitude)
-        }))
-        .filter(user => user.userId !== myProfileData.userId);  // myProfileData.userId와 같은 userId를 제외
-      
-      // 상태 업데이트
-      console.log(userArray);
-      setUserProfileData(userArray);  // 필터링된 배열로 상태 업데이트
-  
-      
-    } catch (error) {
-      console.error('Error fetching socket list:', error); // 에러가 있을 경우 콘솔에 출력
-    }
-  }
 
 
 
@@ -157,29 +110,16 @@ function MapAPI4() {
 
     // 로그 확인
     useEffect(()=> {
-      console.log("myProfileData--------" , myProfileData);
+      // console.log("myProfileData--------" , myProfileData);
       console.log("UserProfileData--------" , UserProfileData);
-    },[myProfileData, UserProfileData])
+      console.log(userList);
+    },[ UserProfileData, userList])
 
-    useEffect(() => {
-      console.log("test--------" , test);
+
   
-    },[test])
-
-
-    //소켓 로그그
-    useEffect(() => {
-      if (socketData !== undefined) {
-          setChatt((prevChatt) => {
-              const updatedMap = new Map(prevChatt); // 기존 데이터를 Map으로 변환
-              updatedMap.set(socketData.userId, socketData); // 새 데이터 추가 또는 업데이트
-              return updatedMap;
-          });
-          console.log(chatt);
-          
-      }
-  }, [socketData]);
   
+
+
   
       // 소켓 닫기
       const end = useCallback(() => {
@@ -203,15 +143,12 @@ function MapAPI4() {
   
   
       });
-  
+
+
+
       //소켓 접속
       const send = useCallback(() => {
-          if(!chkLog) {
-              // if(name === "") {
-              //     alert("이름을 입력하세요.");
-              //     document.getElementById("name").focus();
-              //     return;
-              // }
+          if(!chkLog) {1
               webSocketLogin();
               setChkLog(true);
               console.log("웹소켓 연결 중");
@@ -232,7 +169,8 @@ function MapAPI4() {
                       console.log("웹소켓 연결 상태");
                       alert("산책이 시작되었습니다.");
                       ws.current.send(temp);
-                      socketList(); // 소켓 접속 리스트 
+                      // socketList(); // 소켓 접속 리스트 
+                   
                   }
                   
               }else {
@@ -240,32 +178,66 @@ function MapAPI4() {
               }
       });
 
-    //   useEffect(() => {
-    //     const intervalId = setInterval(() => {
-    //         if (
-    //             myProfileData.location &&
-    //             myProfileData.userId &&
-    //             myProfileData.location.latitude &&
-    //             myProfileData.location.longitude
-    //         ) {
-    //             send(); // 위치 공유 함수 호출
-    //         }
-    //     }, 3000); // 10초 간격으로 실행
-    
-    //     // 컴포넌트 언마운트 시 타이머 정리
-    //     return () => clearInterval(intervalId);
-    // });
-    
       const webSocketLogin = useCallback(() => {
         ws.current = new WebSocket("ws://localhost:8181/tracking");
-  
+    
         ws.current.onmessage = (message) => {
             const dataSet = JSON.parse(message.data);
-            setSocketData(dataSet);
             console.log(dataSet, "data set");
-
-        }
+    
+            setSocketData(dataSet); // 기존 setSocketData 유지
+    
+            if (dataSet.type === "USER_LIST" || dataSet.type === "LOCATION") {
+                updateUserProfileData(dataSet); // 위치 업데이트를 담당하는 별도의 함수 호출
+            }
+        };
+        
+    }, []);
+    
+    const updateUserProfileData = (dataSet) => {
+      console.log("-1 >>>>>>>>>>> ");
+  
+      setUserProfileData(prevData => {
+          let updatedData = prevData.filter(user => user.userId !== ''); // userId가 비어있지 않은 사용자만 유지
+          console.log("0 >>>>>>>>>>> ", updatedData);
+  
+          if (dataSet.type === "USER_LIST" && Array.isArray(dataSet.users)) {
+            // USER_LIST 타입이면 기존 데이터를 무시하고 새 배열을 그대로 사용
+            return [...dataSet.users];
+            
+          
+          } else if (dataSet.type === "LOCATION") {
+              // LOCATION 타입: 개별 값 처리
+              const existingUser = updatedData.find(user => user.userId === dataSet.userId);
+  
+              if (existingUser) {
+                  // 기존 유저 위치 업데이트
+                  existingUser.position = new naver.maps.LatLng(dataSet.latitude, dataSet.longitude);
+                  existingUser.location = { latitude: dataSet.latitude, longitude: dataSet.longitude };
+              } else {
+                  // 새로운 유저 추가
+                  updatedData.push({
+                      photo: dataSet.photo || '',
+                      userName: dataSet.userName || '',
+                      userIntro: dataSet.userIntro || '입력한 정보가 없습니다.',
+                      dogList: dataSet.dogList?.length ? dataSet.dogList : [""],
+                      walkStatus: dataSet.walkStatus ?? true,
+                      userId: dataSet.userId || '',
+                      position: new naver.maps.LatLng(dataSet.latitude, dataSet.longitude),
+                      latitude: dataSet.latitude, 
+                      longitude: dataSet.longitude 
+                  });
+              }
+          }
+  
+          // 새로운 배열로 반환 (불변성 유지)
+          return [...updatedData];
       });
+  };
+  
+    
+    
+    
   
       //webSocket
       //webSocket
@@ -275,48 +247,6 @@ function MapAPI4() {
       //webSocket
 
       
-
-      // 마커 데이터 관리   
-        useEffect(() => {
-
-          const updatedData  = [...UserProfileData];
-
-
-          // chatt 데이터를 순회하면서 UserProfileData를 업데이트
-          chatt.forEach((chat) => {
-          //   if (chat.type === 'CLOSE') {
-          //     // 'CLOSE' 타입일 경우 해당 userId를 가진 유저를 제거
-          //     const filteredData = updatedData.filter((user) => user.userId !== chat.userId);
-          //     setUserProfileData(filteredData); // 업데이트된 데이터로 상태 변경
-          //     return; // 'CLOSE' 타입이면 더 이상 처리하지 않음
-          // }
-
-              const existingUser = updatedData.find((user) => user.userId === chat.userId);
-
-              if (existingUser) {
-                  // 기존 데이터의 위치만 업데이트
-                  existingUser.position = new naver.maps.LatLng(chat.latitude, chat.longitude);
-                
-              } else {
-                  // 소켓 데이터들 
-                  updatedData.push({
-                      image: '',
-                      name: chat.userName,
-                      info: chat.userIntro,
-                      dogList: chat.dogList,
-                      walkStatus: true,
-                      userId: chat.userId,
-                      position: new naver.maps.LatLng(chat.latitude, chat.longitude),
-                  });
-              }
-          });
-
-          // 상태가 변경되었을 때만 업데이트
-          if (JSON.stringify(UserProfileData) !== JSON.stringify(updatedData)) {
-              setUserProfileData(updatedData);
-          } 
-
-      }, [chatt]);
 
     // map 으로 변환 예정 ------------------ 
     // 지도 불러오기
@@ -409,62 +339,67 @@ function MapAPI4() {
 
        
 
-        for(let n = 0 ; n < UserProfileData.length; n++){
-          const randomImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
-          
-          // 마커 옵션 만들기
-          markerOptions[n] = {
-            position: new naver.maps.LatLng(UserProfileData[n].latitude, UserProfileData[n].longitude), // 90도 방향으로 15m 떨어진 위치
-            map: mapRef.current,
-            icon: {
-              url: randomImage,
-              size: new naver.maps.Size(150, 150),
-              origin: new naver.maps.Point(0, 0),
-              anchor: new naver.maps.Point(75, 75), // 이미지값 /2
-            },
-          };
+        if (Array.isArray(UserProfileData) && UserProfileData.length > 0) {
 
-          // 마커 추가하기
-          marker[n] =  new naver.maps.Marker(markerOptions[n]);
-      
-
-          // info 데이터 
-          contentString[n] = ReactDOMServer.renderToString(      
-            <ProfileModal      
-              image={UserProfileData[n].photo} 
-              name={UserProfileData[n].userName} 
-              info={UserProfileData[n].userIntro} 
-              dogList={UserProfileData[n].dogList}  
-              walkStatus={UserProfileData[n].walkStatus}
-              goToProfile={goUserProflie}
-            />      
-          );
-
-          
-          // info 맵에 추가 
-         infowindow[n] = new naver.maps.InfoWindow({
-          content: contentString[n],
-          anchorSize: new naver.maps.Size(15, 5),
-          pixelOffset: new naver.maps.Point(0, -10),
-        });
-
-
-         // 마커 클릭 시 정보창 열기 이벤트
-        naver.maps.Event.addListener(marker[n], "click", () => {
-          if (infowindow[n].getMap()) {
-            infowindow[n].close();
-          } else {
-            infowindow[n].open(mapRef.current, marker[n]); // 정보창 열기
-            const profileButton = document.querySelector('.click-btn'); 
-            if (profileButton) {
-              profileButton.addEventListener('click', () => {  // 프로필 가기 이벤트
-                goUserProflie(UserProfileData[n].userId);
-              });
+          for(let n = 0 ; n < UserProfileData.length; n++){
+  
+            console.log(UserProfileData[n] , "자 들어갑니다다");
+            const randomImage = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+            
+            // 마커 옵션 만들기
+            markerOptions[n] = {
+              position: new naver.maps.LatLng(UserProfileData[n].latitude, UserProfileData[n].longitude), // 90도 방향으로 15m 떨어진 위치
+              map: mapRef.current,
+              icon: {
+                url: randomImage,
+                size: new naver.maps.Size(150, 150),
+                origin: new naver.maps.Point(0, 0),
+                anchor: new naver.maps.Point(75, 75), // 이미지값 /2
+              },
+            };
+  
+            // 마커 추가하기
+            marker[n] =  new naver.maps.Marker(markerOptions[n]);
+        
+  
+            // info 데이터 
+            contentString[n] = ReactDOMServer.renderToString(      
+              <ProfileModal      
+                image={UserProfileData[n].photo} 
+                name={UserProfileData[n].userName} 
+                info={UserProfileData[n].userIntro} 
+                dogList={UserProfileData[n].dogList}  
+                walkStatus={UserProfileData[n].walkStatus}
+                goToProfile={goUserProflie}
+              />      
+            );
+  
+            
+            // info 맵에 추가 
+           infowindow[n] = new naver.maps.InfoWindow({
+            content: contentString[n],
+            anchorSize: new naver.maps.Size(15, 5),
+            pixelOffset: new naver.maps.Point(0, -10),
+          });
+  
+  
+           // 마커 클릭 시 정보창 열기 이벤트
+          naver.maps.Event.addListener(marker[n], "click", () => {
+            if (infowindow[n].getMap()) {
+              infowindow[n].close();
+            } else {
+              infowindow[n].open(mapRef.current, marker[n]); // 정보창 열기
+              const profileButton = document.querySelector('.click-btn'); 
+              if (profileButton) {
+                profileButton.addEventListener('click', () => {  // 프로필 가기 이벤트
+                  goUserProflie(UserProfileData[n].userId);
+                });
+              }
             }
+          });
+  
+  
           }
-        });
-
-
         }
    
         // // 정보창 처음에 열기
