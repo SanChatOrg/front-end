@@ -2,7 +2,8 @@ import './ProfileImageList.css';
 import { PATHS } from '../../../routes/paths.js'
 import { useNavigate } from 'react-router-dom';
 
-function ProfileImageList({imageList}) {
+
+function ProfileImageList({imageList, lastImageRef }) {
 
 
 
@@ -20,7 +21,7 @@ function ProfileImageList({imageList}) {
 
          {imageList.map((img, index) => (
           
-          <div key={index} onClick={()=>goCommunityList(img.communityNo)}>
+          <div key={index}  ref={index === imageList.length - 1 ? lastImageRef : null}  onClick={()=>goCommunityList(img.communityNo)}>
 
           {img.photoList.map((photo, index) => (
               <img key={index} className="profile-grid-img" src={photo.photoUrl} alt={`Profile ${index}`} />

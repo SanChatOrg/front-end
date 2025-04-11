@@ -1,5 +1,5 @@
 
-import {useLocation , useParams , useNavigate} from 'react-router-dom';
+import {useLocation , useParams , useNavigate } from 'react-router-dom';
 import ProfileHeader from './ProfileHeader';
 import ProfileImageList from './ProfileImageList';
 import ProfilePetList from './ProfilePetList';
@@ -8,7 +8,7 @@ import ProfileFollowList from './ProfileFollowList';
 import ProfilePetInfo from './ProfilePetInfo';
 import Header from './Header';
 import axios from "axios";
-import {act, useEffect, useState} from "react";
+import {act, useEffect, useState, useRef, useCallback } from "react";
 import ProfileTabMenu from './ProfileTabMenu';
 import { PATHS } from '../../../routes/paths';
 import './ProfileMain.css';
@@ -23,6 +23,11 @@ function ProfileMain() {
     const [myFollowList, setMyFollowList] = useState([]);
     const [followerList, setfollowerList] = useState([]);
     const [session , setSession] = useState("minjun85");
+    //pagenation
+    const [page, setPage] = useState(0); // offset 대신 page 번호
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const size = 10; // 한 번에 가져올 데이터 수
 
     // 클릭한 userId 값 받아오기
     const {state} = useLocation();
@@ -109,15 +114,41 @@ function ProfileMain() {
         }
     }
 
-    const getPhotoList = async () => {
-        try {
-            let {data} = await axios.get('http://localhost:8181/user/getPhotoList?userId='+ username );
-            setImageList(data);
-            console.log("피드 포토 리스트-----------------" , data);
-        }catch(error) {
+    const observer = useRef();
 
+    const lastImageRef = useCallback(node => {
+        if (loading) return;
+        if (observer.current) observer.current.disconnect();
+    
+        observer.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && hasMore) {
+                getPhotoList(); // 마지막 요소 보이면 호출
+            }
+        });
+    
+        if (node) observer.current.observe(node);
+    }, [loading, hasMore]);
+    
+
+    const getPhotoList = async () => {
+        if (loading || !hasMore) return;
+        setLoading(true);
+        try {
+            const { data } = await axios.get(
+                `http://localhost:8181/user/getPhotoList?userId=${username}&page=${page}&size=${size}`
+            );
+            if (data.length === 0) {
+                setHasMore(false);
+            } else {
+                setImageList(prev => [...prev, ...data]);
+                setPage(prev => prev + 1); // 다음 페이지로 증가
+            }
+        } catch (error) {
+            console.error("에러 발생!", error);
+        } finally {
+            setLoading(false);
         }
-    }
+    };
 
 
 
@@ -244,8 +275,6 @@ function ProfileMain() {
     }
 
 
-    
-
     const [isFollow, setIsFollow] = useState(false);
     const [isFollowList, setIsFollowList] = useState(false);
   
@@ -350,6 +379,7 @@ function ProfileMain() {
 
             <ProfileImageList
                  imageList={imageList || []}
+                 lastImageRef = {lastImageRef}
                
              />
 
